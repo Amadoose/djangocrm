@@ -2,20 +2,52 @@
 
 {% block content %}
 
-<div class="col-md-6 offset-md-3">
+<div class="container">
     {% if user.is_authenticated %}
+
     <h1>Bienvenido {{ user.username }}</h1>
+    <br/>    
+
+    <table class="table table-striped-columns table-hover ">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if records %}
+                {% for record in records %}
+                <tr class="clickable-row" data-href="{% url 'record' record.id %}">
+                    <td>{{ record.id }}</td>
+                    <td>{{ record }}</td>
+                    <td>{{ record.email }}</td>
+                    <td>{{ record.phone }}</td>
+                    <td>{{ record.created_at }}</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+
+    <br>
+    <a href="{% url 'add_record' %}" class="btn btn-secondary">Add Record</a>    
     <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
 
     <!-- <h1>Iniciar Sesión</h1> -->
+</div>
 
     {% else %}
 
+<div class="col-md-6 offset-md-3">
     <h1>lOGOTIPO</h1>
     <br/>
     <form method="post" action="{% url 'home' %}">
         {% csrf_token %}
-        <form>
+        
         <div class="mb-3">
             <input type="text" class="form-control" name="username" placeholder="Usuario" required >
             
@@ -26,7 +58,7 @@
         </div>
         <br>
         <button type="submit" class="btn btn-secondary">Login</button>
-        </form>
+        
 
     </form>
 </div>
