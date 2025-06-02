@@ -84,9 +84,10 @@ DATABASES = {
     #     'PASSWORD': '123456',
     #     'HOST': 'localhost',
     #     'PORT': '3306',
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
-
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL')),
 }
+
+DATABASES['default']['ENGINE'] = 'mysql.connector.django'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
