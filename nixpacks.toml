@@ -1,2 +1,2 @@
 [phases.setup]
-nixPkgs = ["mariadb", "libmysqlclient", "pkg-config", "python311Full"]
+nixPkgs = ["libmysqlclient", "pkg-config", "python311Full"]
