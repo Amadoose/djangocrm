@@ -24,15 +24,35 @@
             box-shadow: 0 8px 32px rgba(60, 60, 120, 0.12);
             overflow: hidden;
             display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1200px;
+            height: auto;
+        }
+        /* .card-look {
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(60, 60, 120, 0.12);
+            overflow: hidden;
+            display: flex;
             width: 3000px;
             height: calc(100vh - 20px);
             max-width: 98vw;
-        }
+        } */
         .split-container {
             display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
             width: 100%;
             height: 100%;
         }
+
+        @media (max-width: 768px) {
+            .split-container {
+                flex-direction: column;
+            }
+        }
+
         /* ... keep your existing styles for .left-panel, .right-panel, etc. ... */
     </style>
     <!-- Keep your existing styles below here -->
@@ -134,7 +154,7 @@
                 <div>
                     <div class="welcome-title">ERP system</div>
                     <div style="margin: 20px 0;">
-                        <img src="/website/img/vecteezy_beach-island-landscape-logo-beach-logo-design-vector_6626965.svg" style="max-width: 200px; width: 100%; height: auto; border-radius: 12px;">
+                        <img src="/img/vecteezy_beach-island-landscape-logo-beach-logo-design-vector_6626965.svg" style="max-width: 200px; width: 100%; height: auto; border-radius: 12px;">
                     </div>
                     <!-- Cube SVG start -->
                     <!-- <div style="margin: 0 auto 20px auto;">
