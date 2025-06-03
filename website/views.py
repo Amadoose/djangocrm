@@ -33,12 +33,21 @@ def home(request):
 
 
 def login_user(request):
-    pass
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')  # Redirect to home after login
+        else:
+            return render(request, 'login.html', {'error': 'Invalid credentials'})
+    return render(request, 'login.html')
 
 def logout_user(request):
     logout(request)
     messages.success(request, 'Has cerrado sesión.')
-    return redirect('home')
+    return redirect('login')
 
 def register_user(request):
     if request.method == 'POST':
