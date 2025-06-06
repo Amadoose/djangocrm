@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}MUNDANA ERP SYSTEM{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://mundanatravel.com/wp-content/uploads/2024/10/mundana-1-1.svg">
+    <style>
+        body, html { height: 100%; margin: 0; font-family: 'Inter', sans-serif; background: #e6e6f5; }
+        .centered-card { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .card-look { background: #fff; border-radius: 24px; box-shadow: 0 12px 48px rgba(60, 60, 120, 0.12); overflow: hidden; display: flex; width: 100%; max-width: 1200px; height: auto; margin: auto; min-height: calc(100vh - 450px);}
+        .split-container { display: flex; flex-direction: row; width: 100%; }
+        .left-panel, .right-panel { flex: 1; padding: 60px 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .right-panel { align-items: center; background: #2c3247; }
+        @media (max-width: 768px) {
+            .split-container { flex-direction: column; }
+            .left-panel, .right-panel { padding: 40px 20px; text-align: center; }
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="centered-card">
+    <div class="card-look">
+        <div class="split-container">
+            <div class="left-panel">
+                {% block content %}{% endblock %}
+            </div>
+            <div class="right-panel">
+                <img src="https://mundanatravel.com/wp-content/uploads/2024/06/mundana-travel-logo.png" style="max-width: 240px; width: 100%; height: auto;">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a> <br/> <br/>
+<a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
 <div class="card">
   <div class="card-header">
     Customer info.
@@ -12,7 +12,6 @@
     <strong> Phone: </strong> <p class="card-text"> {{ customer_record.phone  }} </p>
     <strong> Created at: </strong> <p class="card-text"> {{ customer_record.created_at  }} </p>
     <strong> Customer ID: </strong> <p class="card-text"> {{ customer_record.id  }} </p>
-
   </div>
 </div>
 

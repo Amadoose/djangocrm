@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'website',
+    'website',    
 ]
 
 MIDDLEWARE = [
@@ -74,6 +74,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'dcrm.wsgi.application'
 
 
@@ -88,6 +89,7 @@ DATABASES = {
     #     'PASSWORD': '123456',
     #     'HOST': 'localhost',
     #     'PORT': '3306',
+    # }
     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL')),
 }
 

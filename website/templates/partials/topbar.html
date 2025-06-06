@@ -1,0 +1,8 @@
+{% load static %}
+<div class="topbar px-4 py-2 d-flex justify-content-between align-items-center">
+    <span class="fw-semibold">Welcome, {{ request.user.username }}</span>
+    <div>
+        <input type="text" class="form-control d-inline-block me-2" placeholder="Search..." style="width: 200px;">
+        <img src="{% static 'img/vecteezy_beach-island-landscape-logo-beach-logo-design-vector_6626965.svg' %}" alt="avatar" style="width: 32px; height: 32px; border-radius: 50%;">
+    </div>
+</div>

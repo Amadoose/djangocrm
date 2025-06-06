@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Mundana ERP{% endblock %}
+
+{% block page_content %}
+<div class="d-flex" style="min-height: 100vh;">
+    {% include 'partials/sidebar.html' %}
+    
+    <div class="flex-grow-1 d-flex flex-column">
+        {% include 'partials/topbar.html' %}
+        
+        <main class="p-4" style="flex: 1;">
+            <div class="container-fluid">
+                <h2 class="mb-4" style="font-weight: 500; color: rgba(0,0,0,0.8);">Welcome back, {{ request.user.first_name }}</h2>
+
+                <div class="row">
+                    <div class="col-md-6 col-xl-4 mb-4">
+                        <div class="card shadow-sm rounded-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Orders</h5>
+                                <p class="card-text text-muted">View and manage your recent orders.</p>
+                                <a href="{% url 'orders' %}" class="btn btn-sm btn-outline-primary">Go to Orders</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-4 mb-4">
+                        <div class="card shadow-sm rounded-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Products</h5>
+                                <p class="card-text text-muted">Manage your product listings and inventory.</p>
+                                <a href="{% url 'products' %}" class="btn btn-sm btn-outline-primary">View Products</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-4 mb-4">
+                        <div class="card shadow-sm rounded-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Reports</h5>
+                                <p class="card-text text-muted">Track your analytics and performance.</p>
+                                <a href="{% url 'reports' %}" class="btn btn-sm btn-outline-primary">View Reports</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

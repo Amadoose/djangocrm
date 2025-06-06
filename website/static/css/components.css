@@ -1,0 +1,28 @@
+.sidebar .nav-link {
+    color: var(--color-text-light);
+    font-weight: 500;
+    margin-bottom: 8px;
+    padding: 10px 24px;
+    border-radius: var(--border-radius-md);
+    transition: background 0.2s;
+    flex-grow: 1;
+}
+
+.sidebar .nav-link.active,
+.sidebar .nav-link:focus {
+    background: var(--color-muted);
+    color: var(--color-primary) !important;
+}
+
+.sidebar .nav-link:hover {
+    background: var(--color-muted);
+    color: var(--color-primary);
+}
+
+.dashboard-card {
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 2px 8px var(--color-shadow);
+    padding: 32px;
+    flex-grow: 1;
+}

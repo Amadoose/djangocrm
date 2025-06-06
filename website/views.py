@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from .forms import SignUpForm, AddRecordForm
 from .models import Record  
 
@@ -8,30 +9,10 @@ from .models import Record
 
 # Create your views here.
 
-def home(request):
-    """
-    Render the home page of the DCRM website.
-    This view handles requests to the root URL and returns the home page template.
-    """
-    records = Record.objects.all()  # Fetch all records from the database
-    
-    # Check to see if logging in
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        # authenticate the user
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None:
-            login(request, user)
-            messages.success(request, 'Datos correctos, bienvenido!')
-            return redirect('home')
-        else:
-            messages.error(request, 'Usuario o contraseña incorrectos')
-    # Always return a response
-    return render(request, 'home.html', {'records': records})
 
-
+# User authentication views
+# User authentication views
+# User authentication views
 def login_user(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -49,6 +30,18 @@ def logout_user(request):
     messages.success(request, 'Has cerrado sesión.')
     return redirect('login')
 
+# Home view
+# Home view
+# Home view
+def home(request): 
+    if not request.user.is_authenticated:
+        return redirect('login')
+    records = Record.objects.all()  # Fetch all records from the database
+    return render(request, 'home.html', {'records': records})
+
+# User creation view
+# User creation view
+# User creation view
 def register_user(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -68,7 +61,9 @@ def register_user(request):
     
     return render(request, 'register.html', {'form': form})
 
-
+#REGISTRY CREATION VIEWS
+#REGISTRY CREATION VIEWS
+#REGISTRY CREATION VIEWS
 def customer_record(request, pk):
     """
     Render the customer record page for a specific record identified by its primary key (pk).
