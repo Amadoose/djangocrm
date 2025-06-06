@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-id_7q%f1rr@)q#2l@i&0i8*27t1zv52i%b70v-msc_))kokpin'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -48,7 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',    
+    'whitenoise.middleware.WhiteNoiseMiddleware',    
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -67,7 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'website.context_processors.page_title',  # Add this line
+                'website.context_processors.page_title',  
 
             ],
         },
@@ -75,22 +75,22 @@ TEMPLATES = [
 ]
 
 
-# WSGI_APPLICATION = 'dcrm.wsgi.application'
+WSGI_APPLICATION = 'dcrm.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'mysql.connector.django',
-        'NAME': 'dcrm_db',
-        'USER': 'root',
-        'PASSWORD': '123456',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-    # 'default': dj_database_url.config(default=os.environ.get('DATABASE_URL')),
+    # 'default': {
+    #     'ENGINE': 'mysql.connector.django',
+    #     'NAME': 'dcrm_db',
+    #     'USER': 'root',
+    #     'PASSWORD': '123456',
+    #     'HOST': 'localhost',
+    #     'PORT': '3306',
+    # }
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL')),
 }
 
 DATABASES['default']['ENGINE'] = 'mysql.connector.django'
@@ -131,7 +131,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

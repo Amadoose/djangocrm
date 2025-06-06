@@ -3,10 +3,16 @@
 
 {% block content %}
 
-<div class="container">    
-    <!-- <h1>Welcome {{ user.username }}</h1> -->
-    <br/>  
-    <table class="table table-striped-columns table-hover ">
+<div class="container-fluid px-4">    
+    <br><br>
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'add_record' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-plus-circle-fill"></i> Add Record
+        </a>
+    </div>
+    
+    <br/><br/>
+    <table class="table table-striped-columns table-hover align-content-left" style="width: 100%;">
         <thead class="table-dark">
             <tr>
                 <th scope="col">#</th>
@@ -30,9 +36,5 @@
             {% endif %}
         </tbody>
     </table>
-    <br>
-    <a href="{% url 'add_record' %}" class="btn btn-secondary">Add Record</a>    
-    <!-- <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a> -->
-
 </div>
 {% endblock %}
