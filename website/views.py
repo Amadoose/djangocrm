@@ -38,7 +38,7 @@ def home(request):
     if not request.user.is_authenticated:
         return redirect('login')
     records = Record.objects.all()  # Fetch all records from the database
-    return render(request, 'home.html', {'records': records})
+    return render(request, 'home.html', {'records': records })
 
 # User creation view
 # User creation view

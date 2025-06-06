@@ -43,7 +43,7 @@
         top: 0;
         left: 240px; /* match sidebar width */
         right: 0;
-        height: 72px;
+        height: 50px;
         background: var(--color-white);
         display: flex;
         align-items: center;
@@ -60,11 +60,11 @@
         min-height: calc(100vh - 72px); /* full height minus topbar */
         display: flex;
         flex-direction: column;
-        background: var(--color-bg);
+        background: #ECF0F3;
     }
 
     .content-area {
-        background: #ECF0F3;
+        background: #f8fcff;
         padding: 24px;
         border-radius: 12px;
         box-shadow: 0 1px 6px rgba(0,0,0,0.06);
@@ -92,7 +92,7 @@
     }
 
     .dashboard-card {
-        background: var(--color-white);
+        background: var(--color-muted);
         border-radius: var(--border-radius-lg);
         box-shadow: 0 2px 8px var(--color-shadow);
         padding: 32px;
@@ -164,10 +164,11 @@
                 </a>
             </li>
         </ul>        
-
-        <div class="px-4 mb-4 mt-auto">            
-            <i class="bi bi-box-arrow-right"></i>
-            <a href="{% url 'logout' %}" class="text-decoration-none text-light">Logout</a>
+         <!-- Footer -->
+        <div class="px-4 mb-4 mt-auto">     
+            <a class="nav-link d-flex align-items-center gap-2 text-decoration-none" href="{% url 'logout' %}" >
+                <i class="bi bi-box-arrow-right"></i>
+                Logout</a>            
         </div>
 
         <!-- <ul class="nav flex-column px-2">
@@ -193,10 +194,14 @@
 
     <!-- Topbar -->
     <div class="topbar">
+
+        <!-- Search bar  -->
         <!-- <div class="d-flex align-items-center">
             <input type="text" class="form-control me-3" placeholder="Search..." style="width: 220px;">
         </div> -->
         <!-- Right: user info -->         
+
+        <!-- User function  -->
         <div class="d-flex align-items-center gap-3 ms-auto" >
             <span class="fw-semibold">{{ request.user.username }}</span>
             <img src="{% static 'img/avatar.png' %}" alt="avatar" class="rounded-circle" style="width: 36px; height: 36px;">
@@ -206,6 +211,31 @@
     <!-- Main Content -->
     <div class="main-content">     
         <div class="content-area">
+            <div class="d-flex align-items-center justify-content-center mb-4">
+                <!-- Example: Use Bootstrap icons, change icon per page if desired -->
+                {% if request.resolver_match.url_name == "home" %}
+                    <i class="bi bi-house-door-fill me-2" style="font-size:2rem; color:#6c63ff;"></i>
+                    {% elif request.resolver_match.url_name == "quote" %}
+                        <i class="bi bi-file-earmark-text me-2" style="font-size:2rem; color:#6c63ff;"></i>
+                    {% elif request.resolver_match.url_name == "customers" %}
+                        <i class="bi bi-people-fill me-2" style="font-size:2rem; color:#6c63ff;"></i>
+                    {% elif request.resolver_match.url_name == "users" %}
+                        <i class="bi bi-person-badge-fill me-2" style="font-size:2rem; color:#6c63ff;"></i>
+                    {% elif request.resolver_match.url_name == "reports" %}
+                        <i class="bi bi-bar-chart-line-fill me-2" style="font-size:2rem; color:#6c63ff;"></i>
+                    {% elif request.resolver_match.url_name == "administration" %}
+                        <i class="bi bi-gear-fill me-2" style="font-size:2rem; color:#6c63ff;"></i>
+                    {% endif %}
+                <h2 class="fw-bold m-0" style="font-size:2rem; color:#536192; letter-spacing:0.5px;">
+                    {{ page_title }}
+                </h2>
+            </div>
+            {% if request.resolver_match.url_name == "home" or request.resolver_match.url_name == "record" or request.resolver_match.url_name == "add_record" %}
+            <h2 class="fw-bold m-0 text-center"
+                style="font-size:1rem; color:#536192; letter-spacing:1px; background:linear-gradient(90deg,#f8fcff,#e5e7eb); border-radius:8px; padding:12px 0; box-shadow:0 2px 8px rgba(60,60,120,0.06);">
+                (contenido preeliminar)
+            </h2>
+            {% endif %}
             {% block content %} {% endblock %}
         </div>
     </div>
