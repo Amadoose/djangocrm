@@ -48,7 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',    
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',    
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -58,6 +58,7 @@ CSRF_TRUSTED_ORIGINS = [
 ROOT_URLCONF = 'dcrm.urls'
 
 TEMPLATES = [
+
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
@@ -68,15 +69,12 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'website.context_processors.page_title',  
-
             ],
         },
     },
 ]
 
-
 WSGI_APPLICATION = 'dcrm.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

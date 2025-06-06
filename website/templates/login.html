@@ -2,6 +2,12 @@
 {% load static %}
 {% block title %} Login | MUNDANA ERP {% endblock %}
 {% block content %}
+{% if error %}  
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
 <form method="post">
     {% csrf_token %}
     <h3 class="mb-3" style="font-weight:700;">Mundana ERP</h3>
@@ -9,13 +15,12 @@
     <input type="text" name="username" class="form-control mb-3" placeholder="Enter your username" required>
     <input type="password" name="password" class="form-control mb-3" placeholder="Password" required>
     <div class="d-flex justify-content-between mb-3">
-        <div><input type="checkbox"> Remember me</div>
+        <div><input type="checkbox" name="remember_me" id="remember_me">
+            <label for="remember_me">Remember me</label>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary w-100 mb-3" style="background:#2c3247; border:none;">Sign in</button>
-    <!-- <button class="btn btn-outline-secondary w-100 mb-3">
-        <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" class="me-2"> Sign in with Google
-    </button> -->
-    <p class="text-muted">Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
+    <button type="submit" class="btn btn-primary w-100 mb-3" style="background:#2c3247; border:none;">Sign in</button>    
 </form>
 {% endblock %}
+
 

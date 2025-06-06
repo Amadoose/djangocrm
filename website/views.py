@@ -14,6 +14,7 @@ import random
 # User authentication views
 # User authentication views
 # User authentication views
+
 def login_user(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -21,24 +22,15 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')  # Redirect to home after login
+            return redirect('users')  # Redirect to home after login
         else:
-            return render(request, 'login.html', {'error': 'Invalid credentials'})
+            return render(request, 'login.html', {'error': 'Invalid credentials, please try again.'})
     return render(request, 'login.html')
 
 def logout_user(request):
     logout(request)
     messages.success(request, 'Has cerrado sesión.')
     return redirect('login')
-
-# Home view
-# Home view
-# Home view
-def home(request): 
-    if not request.user.is_authenticated:
-        return redirect('login')
-    records = Record.objects.all()  # Fetch all records from the database
-    return render(request, 'home.html', {'records': records })
 
 # User creation view
 # User creation view
@@ -143,13 +135,10 @@ def customers(request):
     return render(request, 'customers.html', {'selected_image': selected_image})
 
 def users(request):
-    images = [
-        'img/wintoon3.jpg',
-        'img/WIPToon.jpg',
-        'img/wiptoon2.jpg',
-    ]
-    selected_image = random.choice(images)
-    return render(request, 'users.html', {'selected_image': selected_image})
+    if not request.user.is_authenticated:
+        return redirect('login')
+    records = Record.objects.all()  # Fetch all records from the database
+    return render(request, 'users.html', {'records': records })
 
 def reports(request):
     images = [
