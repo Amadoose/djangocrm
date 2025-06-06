@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import SignUpForm, AddRecordForm
 from .models import Record  
+import random
 
 # This file defines the views for the 'website' app in the DCRM project.
 
@@ -123,3 +124,47 @@ def update_record(request, pk):
         return redirect('home')        
 
 
+def quote(request):
+    images = [
+        'img/wintoon3.jpg',
+        'img/WIPToon.jpg',
+        'img/wiptoon2.jpg',
+    ]
+    selected_image = random.choice(images)
+    return render(request, 'quote.html', {'selected_image': selected_image})
+
+def customers(request):
+    images = [
+        'img/wintoon3.jpg',
+        'img/WIPToon.jpg',
+        'img/wiptoon2.jpg',
+    ]
+    selected_image = random.choice(images)
+    return render(request, 'customers.html', {'selected_image': selected_image})
+
+def users(request):
+    images = [
+        'img/wintoon3.jpg',
+        'img/WIPToon.jpg',
+        'img/wiptoon2.jpg',
+    ]
+    selected_image = random.choice(images)
+    return render(request, 'users.html', {'selected_image': selected_image})
+
+def reports(request):
+    images = [
+        'img/wintoon3.jpg',
+        'img/WIPToon.jpg',
+        'img/wiptoon2.jpg',
+    ]
+    selected_image = random.choice(images)
+    return render(request, 'reports.html', {'selected_image': selected_image})
+
+def administration(request):
+    images = [
+        'img/wintoon3.jpg',
+        'img/WIPToon.jpg',
+        'img/wiptoon2.jpg',
+    ]
+    selected_image = random.choice(images)
+    return render(request, 'administration.html', {'selected_image': selected_image})
