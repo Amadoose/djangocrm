@@ -3,7 +3,6 @@
 
 <div class="col-md-6 offset-md-3">
 <a href="{% url 'users' %}" class="btn btn-secondary">Back</a> <br/> <br/>
-<h1>add record</h1>
 
 <form method="post" action="{% url 'add_record' %}">
     {% csrf_token %}
@@ -11,8 +10,6 @@
 <br>
 <button type="submit" class="btn btn-secondary">Add Record</a>
 </form>
-
-
 
 </div>  
 

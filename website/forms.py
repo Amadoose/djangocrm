@@ -37,9 +37,9 @@ class AddRecordForm(forms.ModelForm):
         exclude = (User,)
         fields = ['first_name', 'last_name', 'email', 'phone']
         widgets = {            
-            'first_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Nombre Nombre'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Apellido Apellido'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': '111 222 3333'}),
-            'email': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'juanrodriguez@email.com'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Last Name'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Phone Number'}),
+            'email': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Email Address'}),
         }
 
