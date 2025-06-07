@@ -97,8 +97,8 @@ def add_record(request):
             record = form.save()
             messages.success(request, 'Correctly added.')
             return redirect('record', pk=record.id)  # Redirige al detalle del registro
-        else:        
-            form = AddRecordForm()    
+    else:        
+        form = AddRecordForm()    
     return render(request, 'add_record.html', {'form': form})
 
 def update_record(request, pk):
