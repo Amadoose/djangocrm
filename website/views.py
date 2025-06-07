@@ -47,7 +47,7 @@ def register_user(request):
             user = authenticate(username=username, password=password)
             login(request, user)
             messages.success(request, f'Cuenta creada para {username}. Ahora puedes iniciar sesión.')
-            return redirect('home')
+            return redirect('login')
     else:
         form = SignUpForm()            
         return render(request, 'register.html', {'form': form})
@@ -69,37 +69,36 @@ def customer_record(request, pk):
     else:
         # If the user is not authenticated, redirect to the home page
         messages.success(request, 'Debes iniciar sesión para ver los registros.')
-        return redirect('home')
+        return redirect('login')
     
 def delete_record(request, pk): 
     if not request.user.is_authenticated:
         messages.error(request, 'Debes iniciar sesión para eliminar un registro.')
-        return redirect('home')
+        return redirect('login')
     
     record = Record.objects.get(id=pk)
     
     if request.method == 'POST':
         record.delete()
         messages.success(request, 'Registro eliminado correctamente.')
-        return redirect('home')
+        return redirect('users')
     
     # Si es GET, muestra la página de confirmación
     return render(request, 'confirm_delete.html', {'record': record})
 
 def add_record(request):
     if not request.user.is_authenticated:
-        messages.error(request, 'Debes iniciar sesión para agregar un registro.')
-        return redirect('home')
+        messages.error(request, 'You must log in to add a customer.')
+        return redirect('login')
     
     if request.method == 'POST':
         form = AddRecordForm(request.POST)
         if form.is_valid():
             record = form.save()
-            messages.success(request, 'Registro agregado correctamente.')
+            messages.success(request, 'Correctly added.')
             return redirect('record', pk=record.id)  # Redirige al detalle del registro
-    else:
-        form = AddRecordForm()
-    
+        else:        
+            form = AddRecordForm()    
     return render(request, 'add_record.html', {'form': form})
 
 def update_record(request, pk):
@@ -113,7 +112,7 @@ def update_record(request, pk):
         return render(request, 'update_record.html', {'form': form, 'record': record})
     else:
         messages.error(request, 'Debes iniciar sesión para actualizar un registro.')
-        return redirect('home')        
+        return redirect('login')        
 
 
 def quote(request):

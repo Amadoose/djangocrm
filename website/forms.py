@@ -8,17 +8,17 @@ class SignUpForm(UserCreationForm):
     email = forms.EmailField(
         label='',
         max_length=30,
-        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Correo electrónico'})
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Email Address'})
     )
     first_name = forms.CharField(
         label='',
         max_length=30,
-        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'first name'})
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'First Name'})
     )
     last_name = forms.CharField(
         label='',
         max_length=30,
-        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'last name'})
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Last Name'})
     )
 
     class Meta:
@@ -37,9 +37,9 @@ class AddRecordForm(forms.ModelForm):
         exclude = (User,)
         fields = ['first_name', 'last_name', 'email', 'phone']
         widgets = {            
-            'first_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'First Name'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Last Name'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Phone Number'}),
-            'email': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Email Address'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': ''}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': ''}),
+            'phone': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': ''}),
+            'email': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': ''}),
         }
 
