@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import SignUpForm, AddRecordForm
-from .models import Record  
+from .forms import SignUpForm, ClienteForm, AddRecordForm
+from .models import Record, Cliente
 import random
 
 # This file defines the views for the 'website' app in the DCRM project.
@@ -114,7 +114,48 @@ def update_record(request, pk):
     else:
         messages.error(request, 'Debes iniciar sesión para actualizar un registro.')
         return redirect('login')        
+    
 
+# # # # # # # #
+# CUSTOMERS VIEWS #
+# # # #  #######
+
+##customer index
+def c_list(request):
+    # Query all Cliente objects from the DB
+    clientes = Cliente.objects.all()
+    return render(request, 'customers/list.html', {'clientes': clientes})
+
+def add_customer(request):
+    # Handle form submission
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            form.save()  # Save the data to the database
+            return redirect('customers')  # Redirect after successful submission
+    else:
+        form = ClienteForm()  # Show a blank form for GET request
+    return render(request, 'customers/customer_form.html', {'form': form})
+
+def customer_detail(request, pk):
+    cliente = get_object_or_404(Cliente, pk=pk)
+    return render(request, 'customers/customer_detail.html', {'cliente': cliente})
+
+def customer_edit(request, pk):
+    cliente = get_object_or_404(Cliente, pk=pk)
+    if request.method == 'POST':
+        form = ClienteForm(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            return redirect('customers')
+    else:
+        form = ClienteForm(instance=cliente)
+    return render(request, 'customers/customer_form.html', {'form': form})
+
+
+#########
+#WORK IN PROGRESS
+###########
 
 def quote(request):
     images = [
@@ -124,15 +165,6 @@ def quote(request):
     ]
     selected_image = random.choice(images)
     return render(request, 'quote.html', {'selected_image': selected_image})
-
-def customers(request):
-    images = [
-        'img/wintoon3.jpg',
-        'img/WIPToon.jpg',
-        'img/wiptoon2.jpg',
-    ]
-    selected_image = random.choice(images)
-    return render(request, 'customers.html', {'selected_image': selected_image})
 
 def users(request):
     if not request.user.is_authenticated:

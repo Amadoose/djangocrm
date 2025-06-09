@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Add Customer{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Add Customer</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="row">
+            {% for field in form %}
+                {% if field.name == "celular" %}
+                    <div class="mb-3 col-md-6">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="dial-code">+52</span>
+                            {{ field|add_class:"form-control"|attr:"placeholder:1234567890" }}
+                        </div>
+                        {% if field.errors %}
+                            <div class="text-danger">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="mb-3 col-md-6">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+        </div>
+        <button type="submit" class="btn btn-success">Save</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    var rows = document.querySelectorAll(".clickable-row");
+    rows.forEach(function(row) {
+    row.addEventListener("click", function() {
+    window.location = row.getAttribute("data-href");
+    });
+    row.style.cursor = "pointer";
+    });
+    });
+</script>
+<script>
+    const nationality = document.getElementById("id_nacionalidad");
+    const dialCodeSpan = document.getElementById("dial-code");
+    let dialCodes = {};
+
+    async function loadDialCodes() {
+        try {
+        const resp = await fetch("{% static 'js/country_dial_codes.json' %}");
+        const countries = await resp.json(); // it's an array
+        // Convert array to map { "US": "+1", ... }
+        countries.forEach(c => { dialCodes[c.iso] = c.dialCode });
+        updateDialCode();
+        } catch(err) {
+        console.error("Failed to load dial codes:", err);
+        dialCodes = {};
+        }
+    }
+
+    function updateDialCode() {
+        const code = dialCodes[nationality.value] || "+";
+        dialCodeSpan.textContent = code;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        loadDialCodes();
+        nationality?.addEventListener("change", updateDialCode);
+    });
+</script>
+        
+{% endblock %}
