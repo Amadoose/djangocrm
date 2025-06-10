@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Add New Client{% endblock %} 
+{% block content %}
+
+{% block extra_head %} <link rel="stylesheet" type="text/css" href="{% static 'css/client_form.css' %}"> {% endblock %}
+
+<!-- Compact Header Section -->
+<div class="page-header">
+    <div class="header-flex">
+        <div class="header-left">
+            <h1 class="page-title">
+                {% if is_update %}Update Client{% else %}Add New Client{% endif %}
+            </h1>
+            <p class="page-subtitle">Update client information</p>
+        </div>
+        <div class="form-actions-inline">
+            <a href="{% url 'clients' %}" class="btn-secondary-sm"> <i class="bi bi-arrow-left me-1"></i> Cancel </a>
+            <button type="submit" form="client-form" class="btn-primary-sm"> <i class="bi bi-check-circle me-1"></i>Save Client </button>
+        </div>
+    </div>
+</div>
+
+<form method="post" class="apple-form-compact" id="client-form">
+    {% csrf_token %}    
+    <!-- Display form-wide errors -->
+    {% if form.non_field_errors %}
+        <div class="error-alert-compact">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <!-- Main Content Grid -->
+    <div class="form-content-grid">
+        
+        <!-- Left Column -->
+        <div class="form-column">
+            <!-- Personal Information Section -->
+            <div class="form-section-compact">
+                <h3 class="section-title-compact">
+                    <i class="bi bi-person me-2"></i>Personal Information
+                </h3>
+                
+                <div class="form-grid-compact">
+                    <div class="form-group-compact">
+                        <label for="{{ form.nombre.id_for_label }}" class="form-label-compact">
+                            {{ form.nombre.label }} <span class="required">*</span>
+                        </label>
+                        {{ form.nombre }}
+                        {% if form.nombre.errors %}
+                            <div class="field-error-compact">{{ form.nombre.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group-compact">
+                        <label for="{{ form.apellido_paterno.id_for_label }}" class="form-label-compact">
+                            {{ form.apellido_paterno.label }} <span class="required">*</span>
+                        </label>
+                        {{ form.apellido_paterno }}
+                        {% if form.apellido_paterno.errors %}
+                            <div class="field-error-compact">{{ form.apellido_paterno.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group-compact">
+                        <label for="{{ form.apellido_materno.id_for_label }}" class="form-label-compact">
+                            {{ form.apellido_materno.label }} <span class="required">*</span>
+                        </label>
+                        {{ form.apellido_materno }}
+                        {% if form.apellido_materno.errors %}
+                            <div class="field-error-compact">{{ form.apellido_materno.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-row-compact">
+                        <div class="form-group-compact">
+                            <label for="{{ form.genero.id_for_label }}" class="form-label-compact">
+                                {{ form.genero.label }} <span class="required">*</span>
+                            </label>
+                            {{ form.genero }}
+                            {% if form.genero.errors %}
+                                <div class="field-error-compact">{{ form.genero.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group-compact">
+                            <label for="{{ form.nacionalidad.id_for_label }}" class="form-label-compact">
+                                {{ form.nacionalidad.label }} <span class="required">*</span>
+                            </label>                
+                            <div> {{ form.nacionalidad }} </div>                            
+                            {% if form.nacionalidad.errors %}
+                                <div class="field-error-compact">{{ form.nacionalidad.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information Section -->
+            <div class="form-section-compact">
+                <h3 class="section-title-compact">
+                    <i class="bi bi-envelope me-2"></i>Contact Information
+                </h3>
+                
+                <div class="form-grid-compact">
+                    <div class="form-group-compact">
+                        <label for="{{ form.email.id_for_label }}" class="form-label-compact">
+                            {{ form.email.label }} <span class="required">*</span>
+                        </label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="field-error-compact">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group-compact">
+                        <label for="phoneNumber" class="form-label-compact">
+                            Phone Number <span class="required">*</span>
+                        </label>
+                        <div class="phone-input-group-compact">
+                            <input 
+                                type="text" 
+                                id="areaCode" 
+                                name="area_code"
+                                class="form-control-compact area-code-input" 
+                                placeholder="+52"
+                                maxlength="10"
+                                value="+52"
+                            >
+                            <span class="phone-separator">-</span>
+                            <input 
+                                type="text" 
+                                id="phoneNumber" 
+                                name="celular"
+                                class="form-control-compact phone-number-input" 
+                                placeholder="123-456-7890"
+                                maxlength="12"
+                            >
+                        </div>
+                        <div class="phone-preview-compact" id="fullPhoneDisplay">
+                            Complete: +52-
+                        </div>
+                        {% if form.celular.errors %}
+                            <div class="field-error-compact">{{ form.celular.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="form-column">
+            <!-- Important Dates Section -->
+            <div class="form-section-compact">
+                <h3 class="section-title-compact">
+                    <i class="bi bi-calendar me-2"></i>Important Dates
+                </h3>
+                
+                <div class="form-grid-compact">
+                    <div class="form-group-compact">
+                        <label for="{{ form.fecha_nacimiento.id_for_label }}" class="form-label-compact">
+                            {{ form.fecha_nacimiento.label }} <span class="required">*</span>
+                        </label>
+                        {{ form.fecha_nacimiento }}
+                        {% if form.fecha_nacimiento.errors %}
+                            <div class="field-error-compact">{{ form.fecha_nacimiento.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group-compact">
+                        <label for="{{ form.fecha_aniversario.id_for_label }}" class="form-label-compact">
+                            {{ form.fecha_aniversario.label }}
+                        </label>
+                        {{ form.fecha_aniversario }}
+                        {% if form.fecha_aniversario.errors %}
+                            <div class="field-error-compact">{{ form.fecha_aniversario.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Status Section - Smaller -->
+            <div class="form-section-compact status-section">
+                <h3 class="section-title-compact">
+                    <i class="bi bi-award me-2"></i>Customer Status
+                </h3>
+                
+                <div class="form-group-compact status-field">
+                    <label for="{{ form.nivel_lealtad.id_for_label }}" class="form-label-compact">
+                        {{ form.nivel_lealtad.label }}
+                    </label>
+                    {{ form.nivel_lealtad }}
+                    {% if form.nivel_lealtad.errors %}
+                        <div class="field-error-compact">{{ form.nivel_lealtad.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</form>   
+
+{% endblock %}

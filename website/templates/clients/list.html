@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Client List {% endblock %}
+{% block content %}
+
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/client_list.css' %}">
+{% endblock %}
+
+<div class="container-fluid px-4 py-3">
+    <!-- Header Section -->
+    <div class="list-header">
+        <div class="header-left">
+            <h2 class="page-title">Clients</h2>
+            <span class="client-count" id="clientCount"> Manage your entire client portfolio | {{ clientes|length }} clients</span>
+        </div>
+        <div class="header-right">
+            <div class="search-container">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search clients...">
+            </div>
+            <button class="filter-btn" id="filterToggle">
+                <i class="bi bi-funnel"></i>
+                <span>Filters</span>
+            </button>
+            <a href="{% url 'new_client' %}" class="new-client-btn">
+                <i class="bi bi-plus"></i>
+                <span>New Client</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Filter Panel -->
+    <div class="filter-panel" id="filterPanel">
+        <div class="filter-section">
+            <h6>Show Columns</h6>
+            <div class="column-toggles">
+                <label class="toggle-item">
+                    <input type="checkbox" checked data-column="id">
+                    <span>ID</span>
+                </label>
+                <label class="toggle-item">
+                    <input type="checkbox" checked data-column="name">
+                    <span>Name</span>
+                </label>
+                <label class="toggle-item">
+                    <input type="checkbox" checked data-column="paternal">
+                    <span>Paternal Last Name</span>
+                </label>
+                <label class="toggle-item">
+                    <input type="checkbox" checked data-column="maternal">
+                    <span>Maternal Last Name</span>
+                </label>
+                <label class="toggle-item">
+                    <input type="checkbox" checked data-column="email">
+                    <span>Email</span>
+                </label>
+                <label class="toggle-item">
+                    <input type="checkbox" checked data-column="phone">
+                    <span>Phone</span>
+                </label>
+            </div>
+        </div>
+        <div class="filter-section">
+            <h6>Quick Filters</h6>
+            <div class="quick-filters">
+                <button class="filter-chip active" data-filter="all">All</button>
+                <button class="filter-chip" data-filter="recent">Recently Added</button>
+                {% comment %} <button class="filter-chip" data-filter="gmail">Gmail Users</button> {% endcomment %}
+            </div>
+        </div>
+        <div class="filter-actions">
+            <button class="clear-filters-btn" id="clearFilters">Clear All</button>
+        </div>
+    </div>
+    
+
+    <!-- Table Container -->
+    <div class="table-container">
+        <div class="modern-table-wrapper">
+            <table class="modern-table" id="clientTable">
+                <thead>
+                    <tr>
+                        <th data-column="id" class="sortable">
+                            <span>ID</span>
+                            <i class="bi bi-chevron-expand sort-icon"></i>
+                        </th>
+                        <th data-column="name" class="sortable">
+                            <span>Name</span>
+                            <i class="bi bi-chevron-expand sort-icon"></i>
+                        </th>
+                        <th data-column="paternal" class="sortable">
+                            <span>Paternal Last Name</span>
+                            <i class="bi bi-chevron-expand sort-icon"></i>
+                        </th>
+                        <th data-column="maternal" class="sortable">
+                            <span>Maternal Last Name</span>
+                            <i class="bi bi-chevron-expand sort-icon"></i>
+                        </th>
+                        <th data-column="email" class="sortable">
+                            <span>Email</span>
+                            <i class="bi bi-chevron-expand sort-icon"></i>
+                        </th>
+                        <th data-column="phone" class="sortable">
+                            <span>Phone</span>
+                            <i class="bi bi-chevron-expand sort-icon"></i>
+                        </th>
+                        <th class="actions-column"></th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    {% for cliente in clientes %}
+                    <tr class="table-row" data-client-id="{{ cliente.pk }}" onclick="window.location.href='{% url 'client_detail' cliente.pk %}'">
+                        <td data-column="id">
+                            <span class="id-badge">{{ cliente.id }}</span>
+                        </td>
+                        <td data-column="name">
+                            <div class="client-name">
+                                <span class="name-primary">{{ cliente.nombre }}</span>
+                            </div>
+                        </td>
+                        <td data-column="paternal">{{ cliente.apellido_paterno }}</td>
+                        <td data-column="maternal">{{ cliente.apellido_materno }}</td>
+                        <td data-column="email">
+                            <a href="mailto:{{ cliente.email }}" class="email-link" onclick="event.stopPropagation();">
+                                {{ cliente.email }}
+                            </a>
+                        </td>
+                        <td data-column="phone">
+                            <span class="phone-number">{{ cliente.celular }}</span>
+                        </td>
+                        <td class="actions-cell">
+                            <div class="action-buttons">
+                                {% comment %} <a href="{% url 'client_detail' cliente.pk %}" class="action-btn view-btn" onclick="event.stopPropagation();" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </a> {% endcomment %}
+                                <a href="{% url 'update_client' cliente.pk %}" class="action-btn edit-btn" onclick="event.stopPropagation();" title="Edit Client">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-icon">
+            <i class="bi bi-search"></i>
+        </div>
+        <h4>No clients found</h4>
+        <p>Try adjusting your search or filter criteria</p>
+        <button class="clear-filters-btn" onclick="clearAllFilters()">Clear Filters</button>
+    </div>
+</div>
+
+{% endblock %}

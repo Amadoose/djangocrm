@@ -124,33 +124,33 @@ def update_record(request, pk):
 def c_list(request):
     # Query all Cliente objects from the DB
     clientes = Cliente.objects.all()
-    return render(request, 'customers/list.html', {'clientes': clientes})
+    return render(request, 'clients/list.html', {'clientes': clientes})
 
-def add_customer(request):
+def new_client(request):
     # Handle form submission
     if request.method == 'POST':
         form = ClienteForm(request.POST)
         if form.is_valid():
             form.save()  # Save the data to the database
-            return redirect('customers')  # Redirect after successful submission
+            return redirect('clients')  # Redirect after successful submission
     else:
         form = ClienteForm()  # Show a blank form for GET request
-    return render(request, 'customers/customer_form.html', {'form': form})
+    return render(request, 'clients/client_form.html', {'form': form, 'is_update': False})
 
-def customer_detail(request, pk):
+def client_detail(request, pk):
     cliente = get_object_or_404(Cliente, pk=pk)
-    return render(request, 'customers/customer_detail.html', {'cliente': cliente})
+    return render(request, 'clients/client_detail.html', {'cliente': cliente})
 
-def customer_edit(request, pk):
+def update_client(request, pk):
     cliente = get_object_or_404(Cliente, pk=pk)
     if request.method == 'POST':
         form = ClienteForm(request.POST, instance=cliente)
         if form.is_valid():
             form.save()
-            return redirect('customers')
+            return redirect('clients')
     else:
         form = ClienteForm(instance=cliente)
-    return render(request, 'customers/customer_form.html', {'form': form})
+    return render(request, 'clients/client_form.html', {'form': form, 'is_update': True})
 
 
 #########

@@ -1,0 +1,114 @@
+{% extends "base.html" %} 
+{% load static %} 
+{% block title %}Client Details{% endblock %} 
+{% block content %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/client_detail.css' %}">
+{% endblock %}
+
+<!-- Header Section -->
+<div class="page-header">
+  <h1 class="page-title">Client Details</h1>
+  <p class="page-subtitle">View and manage client information</p>
+</div>
+
+<!-- Main Info Card -->
+<div class="detail-card">
+  <div class="detail-grid">
+    <!-- Full Name - Copyable -->
+    <div class="detail-item">
+      <label class="detail-label"> <i class="bi bi-person-fill me-2"></i>Full Name </label>
+      <div class="copyable-field" onclick="copyText(this)" title="Click to copy name">
+        <span class="field-content">{{ cliente.nombre }} {{ cliente.apellido_paterno }} {{cliente.apellido_materno }}</span>
+        <i class="bi bi-copy copy-icon"></i>
+      </div>
+    </div>
+
+    <!-- Email - Copyable -->
+    <div class="detail-item">
+      <label class="detail-label"> <i class="bi bi-envelope-fill me-2"></i>Email</label>
+      <div class="copyable-field" onclick="copyText(this)" title="Click to copy email">
+        <span class="field-content">{{ cliente.email }}</span>
+        <i class="bi bi-copy copy-icon"></i>
+      </div>
+    </div>
+
+    <!-- Phone - Copyable -->
+    <div class="detail-item">
+      <label class="detail-label"><i class="bi bi-telephone-fill me-2"></i>Phone</label>
+      <div class="copyable-field" onclick="copyText(this)" title="Click to copy phone">
+        <span class="field-content">
+          {% if cliente.area_code and cliente.celular %} {{ cliente.area_code}}{{ cliente.celular }} 
+          {% elif cliente.celular %} +52{{cliente.celular }} 
+          {% else %} Not provided {% endif %}
+        </span>
+        <i class="bi bi-copy copy-icon"></i>
+      </div>
+    </div>
+
+    <!-- Nationality -->
+    <div class="detail-item">
+      <label class="detail-label">
+        <i class="bi bi-flag-fill me-2"></i>Nationality
+      </label>
+      <div class="info-field">{{ cliente.nacionalidad }}</div>
+    </div>
+
+    <!-- Date of Birth -->
+    <div class="detail-item">
+      <label class="detail-label">
+        <i class="bi bi-calendar-heart-fill me-2"></i>Date of Birth
+      </label>
+      <div class="info-field">{{ cliente.fecha_nacimiento|date:"F d, Y" }}</div>
+    </div>
+
+    <!-- Gender -->
+    <div class="detail-item">
+      <label class="detail-label">
+        <i class="bi bi-gender-ambiguous me-2"></i>Gender
+      </label>
+      <div class="info-field">
+        {% for choice in cliente.GENDER_CHOICES %} {% if choice.0 == cliente.genero %} {{ choice.1 }} {% endif %} {% endfor %}
+      </div>
+    </div>
+
+    <!-- Loyalty Level -->
+    <div class="detail-item">
+      <label class="detail-label">
+        <i class="bi bi-star-fill me-2"></i>Loyalty Level
+      </label>
+      <div class="info-field">
+        <span class="loyalty-badge loyalty-{{ cliente.nivel_lealtad }}">
+          {% if cliente.nivel_lealtad == 'bronze' %}🥉 Bronze 
+          {% elif cliente.nivel_lealtad == 'silver' %}🥈 Silver 
+          {% elif cliente.nivel_lealtad == 'gold' %}🥇 Gold {% elif cliente.nivel_lealtad == 'platinum' %}💎 Platinum {% endif %}
+        </span>
+      </div>
+    </div>
+
+    <!-- Anniversary Date -->
+    <div class="detail-item">
+      <label class="detail-label">
+        <i class="bi bi-heart-fill me-2"></i>Anniversary Date
+      </label>
+      <div class="info-field">
+        {% if cliente.fecha_aniversario %} {{ cliente.fecha_aniversario|date:"F
+        d, Y" }} {% else %}
+        <span class="text-muted">Not provided</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="action-buttons">
+  <a href="{% url 'update_client' cliente.pk %}" class="btn-primary">
+    <i class="bi bi-pencil-square me-2"></i>Edit Client
+  </a>
+  <a href="{% url 'clients' %}" class="btn-secondary">
+    <i class="bi bi-arrow-left me-2"></i>Back to List
+  </a>
+</div>
+{% endblock %}

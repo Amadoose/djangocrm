@@ -15,20 +15,20 @@ class Record(models.Model):
         return (f"{self.first_name} {self.last_name}")
     
 class Cliente(models.Model):
-    # Gender choices
+    
     GENDER_CHOICES = [
-        ('masculino', 'Male'),
-        ('femenino', 'Female'),
-        ('otro', 'Other'),
-        ('prefiero_no_decir', 'Rather not say'),
+        ('👨 Male', '👨 Male'),
+        ('👩 Female', '👩 Female'),
+        ('⚧️ Other', '⚧️ Other')       
     ]
 
     # CharField for short strings (names, etc.)
     nombre = models.CharField(max_length=100)
     apellido_paterno = models.CharField(max_length=100)
-    apellido_materno = models.CharField(max_length=100, blank=True, null=True)  # Optional field
+    apellido_materno = models.CharField(max_length=100)  # Optional field
     email = models.EmailField(unique=True)  # EmailField with uniqueness constraint
-    celular = models.CharField(max_length=15)
+    celular = models.CharField(max_length=15, help_text="Phone number wihout area code")
+    area_code = models.CharField(max_length=10, default="+52", help_text="Area code with country code")
     nacionalidad = CountryField(blank_label='(Select country)', default='MX')
 
     # Date fields for birthdays and anniversaries
@@ -36,7 +36,7 @@ class Cliente(models.Model):
     fecha_aniversario = models.DateField(blank=True, null=True)
 
     # Gender w choices and loyalty level as plain text
-    genero = models.CharField(max_length=20, choices=GENDER_CHOICES, default='prefiero_no_decir')
+    genero = models.CharField(max_length=20, choices=GENDER_CHOICES, default='👩 Female')
     nivel_lealtad = models.CharField(max_length=20,
                                      choices=[('bronze', '🥉 Bronze'), ('silver', '🥈 Silver'), ('gold', '🥇 Gold'),('platinum','💎 Platinum',)], default='bronze', blank=True, null=True)
 

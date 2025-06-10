@@ -3,13 +3,16 @@ def page_title(request):
     url_titles = {
         'home': 'Home',
         'quote': 'New Quote',
-        'customers': 'Customers',
+        'clients': '',
         'users': 'Users',
         'reports': 'Reports',
         'administration': 'Administration',
+        'new_client': '',
+        'update_client': '',
+        'client_detail': '',
         # Add more as needed
     }
     url_name = getattr(request.resolver_match, 'url_name', None)
     return {
-        'page_title': url_titles.get(url_name, 'MUNDANA ERP')
+        'page_title': url_titles.get(url_name)
     }

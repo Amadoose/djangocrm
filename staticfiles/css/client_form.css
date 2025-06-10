@@ -1,0 +1,374 @@
+.page-header {
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(118, 125, 152, 0.15);
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1d1d1f;
+    margin: 0;
+    letter-spacing: -0.5px;    
+}
+
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-actions-inline {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 8px;  /* Align with title */
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: #8e8e93;
+    margin: 8px 0 0 0;
+    font-weight: 400;
+}
+
+
+.btn-secondary-sm, .btn-primary-sm {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    border-radius: 12px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.btn-secondary-sm {
+    background: rgba(255, 255, 255, 0.8);
+    color: #6D6D70;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary-sm:hover {
+    background: rgba(255, 255, 255, 1);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+}
+
+.btn-primary-sm {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #4A5A8F 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(83, 97, 146, 0.25);
+}
+
+.btn-primary-sm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(83, 97, 146, 0.35);
+    color: white;
+}
+
+.apple-form-compact {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 32px;
+}
+
+.error-alert-compact {
+    background: rgba(254, 242, 242, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(254, 202, 202, 0.5);
+    color: #dc2626;
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.1);
+}
+
+.form-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+.form-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-section-compact {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(118, 125, 152, 0.12);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 8px 32px rgba(44, 50, 71, 0.034);
+}
+
+.status-section {
+    padding: 24px;
+}
+
+.section-title-compact {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.01em;
+}
+
+.form-grid-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row-compact {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.status-field {
+    max-width: 250px;
+}
+
+.form-label-compact {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #6D6D70;
+    margin: 0;
+    letter-spacing: 0.01em;
+}
+
+.required {
+    color: #dc2626;
+}
+
+.form-group-compact input,
+.form-group-compact select,
+.form-group-compact textarea {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1D1D1F;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.form-group-compact input:focus,
+.form-group-compact select:focus,
+.form-group-compact textarea:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 1);
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 20px rgba(83, 97, 146, 0.15);
+    transform: translateY(-1px);
+}
+
+.form-group-compact input:hover,
+.form-group-compact select:hover,
+.form-group-compact textarea:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(0, 0, 0, 0.12);
+}
+
+.phone-input-group-compact {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.form-control-compact {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1D1D1F;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.form-control-compact:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 1);
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 20px rgba(83, 97, 146, 0.15);
+    transform: translateY(-1px);
+}
+
+.form-control-compact:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(0, 0, 0, 0.12);
+}
+
+.area-code-input {
+    width: 90px;
+    flex-shrink: 0;
+}
+
+.phone-number-input {
+    flex: 1;
+}
+
+.phone-separator {
+    color: #6D6D70;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.phone-preview-compact {
+    font-size: 0.85rem;
+    color: #8E8E93;
+    margin-top: 4px;
+    font-weight: 400;
+}
+
+.field-error-compact {
+    color: #dc2626;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+/* Loyalty Badge Styles (if needed in forms) */
+.loyalty-badge {
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    display: inline-block;
+}
+
+.loyalty-bronze {
+    background: linear-gradient(135deg, #CD7F32 0%, #B8860B 100%);
+    color: white;
+}
+
+.loyalty-silver {
+    background: linear-gradient(135deg, #C0C0C0 0%, #A8A8A8 100%);
+    color: #333;
+}
+
+.loyalty-gold {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #333;
+}
+
+.loyalty-platinum {
+    background: linear-gradient(135deg, #E5E4E2 0%, #D3D3D3 100%);
+    color: #333;
+}
+
+/* Form Action Buttons */
+.form-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(118, 125, 152, 0.15);
+}
+
+.btn-primary, .btn-secondary {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #4A5A8F 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(83, 97, 146, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(83, 97, 146, 0.4);
+    color: white;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.8);
+    color: #6D6D70;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 1);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-content-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+    
+    .form-actions-inline {
+        justify-content: center;
+    }
+    
+    .form-row-compact {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-section-compact {
+        padding: 24px;
+        border-radius: 16px;
+    }
+    
+    .page-title-compact {
+        font-size: 1.75rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+}

@@ -13,13 +13,3 @@ def fetch_country_choices():
         return [('MX', '🇲🇽 Mexico'), ('US', '🇺🇸 United States'), ('CA', '🇨🇦 Canada')]
     
 
-def get_dial_code_by_country(iso_code):
-    path = finders.find('js/country_dial_codes.json')
-    if not path:
-        return '+'
-    with open(path, 'r', encoding='utf-8') as f:
-        countries = json.load(f)
-        for c in countries:
-            if c['iso'] == iso_code:
-                return c['dialCode']
-    return '+'

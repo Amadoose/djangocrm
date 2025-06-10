@@ -5,17 +5,17 @@ from . import views
 urlpatterns = [
     # AUTHENTICATE URLS
     # path('home/', views.home, name='home'),      
-    path('', views.users, name='users'),     
+    path('', views.c_list, name='clients'),     
     path('login/', views.login_user, name='login'), 
     path('logout/', views.logout_user, name='logout'),    
 
     ### CUSTOMER URLS      
-    path('customers/list/', views.c_list, name='customers'),     
-    path('customers/add_customer/', views.add_customer, name='add_customer'),
+    path('clients/', views.c_list, name='clients'),     
+    path('clients/new_client/', views.new_client, name='new_client'),
     # Detail view
-    path('customers/<int:pk>/', views.customer_detail, name='customer_detail'),
+    path('clients/client_detail/<int:pk>/', views.client_detail, name='client_detail'),
     # Edit view
-    path('customers/customer_edit/<int:pk>/', views.customer_edit, name='customer_edit'),
+    path('clients/update_client/<int:pk>/', views.update_client, name='update_client'),
 
     ### functionality
     path('users/', views.users, name='users'),
