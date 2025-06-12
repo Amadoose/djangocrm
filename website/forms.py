@@ -10,7 +10,7 @@ class ClienteForm(forms.ModelForm):
         fields = [
             'nombre', 'apellido_paterno', 'apellido_materno', 'email',
             'nacionalidad', 'celular', 'fecha_nacimiento', 'fecha_aniversario',
-            'genero', 'nivel_lealtad'
+            'genero', 'nivel_lealtad', 'area_code'
         ]        
 
         labels = {
@@ -54,25 +54,45 @@ class ClienteForm(forms.ModelForm):
             }),
         }
 
-    def save(self, commit=True):
-        instance = super().save(commit=False)
-        
-        # You can add custom logic here if needed
-        # For example, validate the phone format
-        celular = self.cleaned_data.get('celular', '')
-        if celular:
-            # Remove any formatting for storage
-            instance.celular = celular.replace('-', '').replace(' ', '')
-        
-        if commit:
-            instance.save()
-        return instance
-
     # Add a method to get the full phone number
     def get_full_phone(self):
         area_code = self.cleaned_data.get('area_code', '+52')
         celular = self.cleaned_data.get('celular', '')
-        return f"{area_code}-{celular}" if celular else area_code
+        return f"+{area_code}{celular}" if celular else area_code
+    
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        
+        celular = self.cleaned_data.get('celular', '')
+        if celular:
+            # Ensure we don't duplicate the area code
+            if celular.startswith(self.cleaned_data.get('area_code', '+52')):
+                # Already formatted correctly
+                instance.celular = celular
+        
+        if commit:
+            instance.save()
+        return instance    
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.celular:
+            # Split existing phone number
+            if '-' in self.instance.celular:
+                area_code, number = self.instance.celular.split('-', 1)
+                self.initial['area_code'] = area_code
+                self.initial['celular'] = number
+
+    def clean(self):
+        cleaned_data = super().clean()
+        celular = cleaned_data.get('celular', '').strip()
+        
+        if celular:
+            # Remove ALL non-digits (no formatting in DB)
+            cleaned_data['celular'] = ''.join(c for c in celular if c.isdigit())
+        
+        return cleaned_data
+    
 
 
 
@@ -115,6 +135,3 @@ class AddRecordForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': ''}),
             'email': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': ''}),
         }
-
-
-

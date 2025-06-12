@@ -5,6 +5,10 @@
 
 {% block extra_head %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/client_list.css' %}">
+<!-- Add these libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+
 {% endblock %}
 
 <div class="container-fluid px-4 py-3">
@@ -12,20 +16,36 @@
     <div class="list-header">
         <div class="header-left">
             <h2 class="page-title">Clients</h2>
-            <span class="client-count" id="clientCount"> Manage your entire client portfolio | {{ clientes|length }} clients</span>
+            <p class="client-count"> Manage your entire client portfolio</p>
+            <p class="client-count">|</p>
+            <span class="client-count" id="clientCount">{{ clientes|length }} clients</span>
         </div>
         <div class="header-right">
             <div class="search-container">
                 <i class="bi bi-search search-icon"></i>
                 <input type="text" class="search-input" id="searchInput" placeholder="Search clients...">
             </div>
+            <!-- Add Export Buttons -->
+            <div class="export-buttons">
+                <button class="export-btn" onclick="printTable()" title="Print">
+                    <i class="bi bi-printer"></i>
+                </button>
+                <button class="export-btn" onclick="exportToPDF()" title="Export to PDF">
+                    <i class="bi bi-file-pdf"></i>
+                </button>
+                <button class="export-btn" onclick="exportToExcel()" title="Export to Excel">
+                    <i class="bi bi-file-excel"></i>
+                </button>
+            </div>            
             <button class="filter-btn" id="filterToggle">
                 <i class="bi bi-funnel"></i>
                 <span>Filters</span>
             </button>
-            <a href="{% url 'new_client' %}" class="new-client-btn">
-                <i class="bi bi-plus"></i>
-                <span>New Client</span>
+            <a href="{% url 'new_client' %}" class="btn-link">
+                <button class='new-client-btn'>
+                    <i class="bi bi-plus"></i>
+                    <span>New Client</span>
+                </button>
             </a>
         </div>
     </div>
@@ -35,6 +55,9 @@
         <div class="filter-section">
             <h6>Show Columns</h6>
             <div class="column-toggles">
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="uncheckAll()">
+                    Uncheck All
+                </button>                
                 <label class="toggle-item">
                     <input type="checkbox" checked data-column="id">
                     <span>ID</span>
@@ -59,21 +82,28 @@
                     <input type="checkbox" checked data-column="phone">
                     <span>Phone</span>
                 </label>
+                <label class="toggle-item">
+                    <input type="checkbox" checked data-column="nationality">
+                    <span>Nationality</span>
+                </label>         
+                <label class="toggle-item">
+                    <input type="checkbox" checked data-column="loyalty">
+                    <span>Loyalty Level</span>
+                </label>                       
             </div>
         </div>
         <div class="filter-section">
             <h6>Quick Filters</h6>
             <div class="quick-filters">
                 <button class="filter-chip active" data-filter="all">All</button>
-                <button class="filter-chip" data-filter="recent">Recently Added</button>
-                {% comment %} <button class="filter-chip" data-filter="gmail">Gmail Users</button> {% endcomment %}
+                <button class="filter-chip" data-filter="recent">Recently Added</button> 
             </div>
         </div>
         <div class="filter-actions">
             <button class="clear-filters-btn" id="clearFilters">Clear All</button>
-        </div>
+        </div> 
     </div>
-    
+
 
     <!-- Table Container -->
     <div class="table-container">
@@ -105,7 +135,15 @@
                             <span>Phone</span>
                             <i class="bi bi-chevron-expand sort-icon"></i>
                         </th>
-                        <th class="actions-column"></th>
+                        <th data-column="nationality" class="sortable">
+                            <span>Nationality</span>
+                            <i class="bi bi-chevron-expand sort-icon"></i>
+                        </th>
+                        <th data-column="loyalty" class="sortable">
+                            <span>Loyalty</span>
+                            <i class="bi bi-chevron-expand sort-icon"></i>
+                        </th>                                                
+                        <th class="actions-column"></th>   
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -122,18 +160,31 @@
                         <td data-column="paternal">{{ cliente.apellido_paterno }}</td>
                         <td data-column="maternal">{{ cliente.apellido_materno }}</td>
                         <td data-column="email">
-                            <a href="mailto:{{ cliente.email }}" class="email-link" onclick="event.stopPropagation();">
+                            <a href="mailto:{{ cliente.email }}" class="email-link" onclick="event.stopPropagation();">                                
                                 {{ cliente.email }}
                             </a>
                         </td>
                         <td data-column="phone">
-                            <span class="phone-number">{{ cliente.celular }}</span>
+                            <a href="https://wa.me/{{ cliente.celular }}" target="_blank" class="whatsapp-link" onclick="event.stopPropagation()">
+                                <i class="bi bi-whatsapp text-success"></i>
+                                <span class="phone-number">{{ cliente.celular }}</span>
+                            </a>
                         </td>
+                        </td>
+                        <td data-column="nationality">
+                            <span class="nationality">
+                                <img src="{% static 'flags/' %}{{ cliente.nacionalidad }}.gif" alt="{{ cliente.nacionalidad }}" class="country-flag">
+                                {{ cliente.nacionalidad }}</span>
+                        </td>
+                        </td>
+                        <td data-column="loyalty">
+                            <span class="loyalty-lv">{{ cliente.nivel_lealtad }}</span>
+                        </td>                                                
                         <td class="actions-cell">
                             <div class="action-buttons">
-                                {% comment %} <a href="{% url 'client_detail' cliente.pk %}" class="action-btn view-btn" onclick="event.stopPropagation();" title="View Details">
+                                <a href="{% url 'client_detail' cliente.pk %}" class="action-btn view-btn" onclick="event.stopPropagation();" title="View Details">
                                     <i class="bi bi-eye"></i>
-                                </a> {% endcomment %}
+                                </a>
                                 <a href="{% url 'update_client' cliente.pk %}" class="action-btn edit-btn" onclick="event.stopPropagation();" title="Edit Client">
                                     <i class="bi bi-pencil"></i>
                                 </a>
@@ -156,5 +207,13 @@
         <button class="clear-filters-btn" onclick="clearAllFilters()">Clear Filters</button>
     </div>
 </div>
+
+<script src="{% static 'js/c_list.js' %}"></script>
+<script>
+    // In your Django template
+    const URL_BUILDER = {
+        clientDetail: (id) => "{% url 'client_detail' 0 %}".replace('0', id)
+    };
+</script>
 
 {% endblock %}

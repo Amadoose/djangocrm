@@ -191,7 +191,7 @@
     align-items: center;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     border: none;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: "Segoe UI", Roboto, sans-serif;
     letter-spacing: 0.01em;
 }
 

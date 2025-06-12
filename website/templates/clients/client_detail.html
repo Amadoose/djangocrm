@@ -37,9 +37,9 @@
     <!-- Phone - Copyable -->
     <div class="detail-item">
       <label class="detail-label"><i class="bi bi-telephone-fill me-2"></i>Phone</label>
-      <div class="copyable-field" onclick="copyText(this)" title="Click to copy phone">
+      <div class="copyable-field" onclick="copyText(this)" id="fullPhoneDisplay" title="Click to copy phone">
         <span class="field-content">
-          {% if cliente.area_code and cliente.celular %} {{ cliente.area_code}}{{ cliente.celular }} 
+          {% if cliente.area_code and cliente.celular %} {{ cliente.celular}}
           {% elif cliente.celular %} +52{{cliente.celular }} 
           {% else %} Not provided {% endif %}
         </span>
@@ -93,8 +93,8 @@
         <i class="bi bi-heart-fill me-2"></i>Anniversary Date
       </label>
       <div class="info-field">
-        {% if cliente.fecha_aniversario %} {{ cliente.fecha_aniversario|date:"F
-        d, Y" }} {% else %}
+        {% if cliente.fecha_aniversario %} {{ cliente.fecha_aniversario|date:"F d, Y" }} 
+        {% else %}
         <span class="text-muted">Not provided</span>
         {% endif %}
       </div>
@@ -104,11 +104,13 @@
 
 <!-- Action Buttons -->
 <div class="action-buttons">
-  <a href="{% url 'update_client' cliente.pk %}" class="btn-primary">
-    <i class="bi bi-pencil-square me-2"></i>Edit Client
-  </a>
   <a href="{% url 'clients' %}" class="btn-secondary">
     <i class="bi bi-arrow-left me-2"></i>Back to List
   </a>
+  <a href="{% url 'update_client' cliente.pk %}" class="btn-primary">
+    <i class="bi bi-pencil-square me-2"></i>Edit Client
+  </a>
 </div>
+
+<script src="{% static 'js/client_detail.js' %}"></script>
 {% endblock %}

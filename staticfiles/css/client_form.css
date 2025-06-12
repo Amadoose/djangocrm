@@ -51,7 +51,7 @@
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     font-weight: 600;
     letter-spacing: 0.01em;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Segoe UI', Roboto, sans-serif;
 }
 
 .btn-secondary-sm {
@@ -176,9 +176,8 @@
     border-radius: 12px;
     padding: 14px 16px;
     font-size: 0.95rem;
-    font-weight: 500;
-    color: #1D1D1F;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 500;    
+    font-family: 'Segoe UI', Roboto, sans-serif;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -190,6 +189,7 @@
     border-color: var(--color-primary);
     box-shadow: 0 4px 20px rgba(83, 97, 146, 0.15);
     transform: translateY(-1px);
+    color: initial;
 }
 
 .form-group-compact input:hover,
@@ -222,7 +222,7 @@
     background: rgba(255, 255, 255, 1);
     border-color: var(--color-primary);
     box-shadow: 0 4px 20px rgba(83, 97, 146, 0.15);
-    transform: translateY(-1px);
+    transform: translateY(-1px);    
 }
 
 .form-control-compact:hover {
@@ -308,7 +308,7 @@
     align-items: center;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     border: none;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Segoe UI', Roboto, sans-serif;
     letter-spacing: 0.01em;
     cursor: pointer;
 }

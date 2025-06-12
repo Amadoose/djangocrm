@@ -11,9 +11,9 @@ urlpatterns = [
 
     ### CUSTOMER URLS      
     path('clients/', views.c_list, name='clients'),     
-    path('clients/new_client/', views.new_client, name='new_client'),
+    path('clients/new/', views.new_client, name='new_client'),
     # Detail view
-    path('clients/client_detail/<int:pk>/', views.client_detail, name='client_detail'),
+    path('clients/<int:pk>/', views.client_detail, name='client_detail'),
     # Edit view
     path('clients/update_client/<int:pk>/', views.update_client, name='update_client'),
 
@@ -28,7 +28,5 @@ urlpatterns = [
     path('quote/', views.quote, name='quote'),   
     path('reports/', views.reports, name='reports'),  
     path('administration/', views.administration, name='administration'),  
-
-
 ] 
 
