@@ -33,7 +33,7 @@ def random_date(start_date, end_date):
     random_days = random.randrange(time_between.days)
     return start_date + timedelta(days=random_days)
 
-def generate_clients(num_clients=1000):
+def generate_clients(num_clients=5000):
     """Generate test clients for the database"""
     
     for i in range(num_clients):

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+<img src="{% get_static_prefix %}flags/{{ cliente.nacionalidad }}.gif" alt="{{ cliente.nacionalidad }}" class="country-flag">
 {% block title %} Client List {% endblock %}
 {% block content %}
 
@@ -13,9 +14,10 @@
 
 <div class="container-fluid px-4 py-3">
     <!-- Header Section -->
-    <div class="list-header">
+     <h2 class="page-title">Clients</h2>
+    <div class="list-header">        
         <div class="header-left">
-            <h2 class="page-title">Clients</h2>
+            
             <p class="client-count"> Manage your entire client portfolio</p>
             <p class="client-count">|</p>
             <span class="client-count" id="clientCount">{{ clientes|length }} clients</span>

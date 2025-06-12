@@ -27,6 +27,8 @@
     color: var(--text-dark);
     letter-spacing: -0.5px;
     line-height: 1.2; /* Added back explicit line-height */
+    margin-top: -20px;
+    margin-left: -20px;
 }
 
 .page-subtitle {
@@ -103,9 +105,9 @@
     font: 500 14px/1;
 }
 .filter-btn.active {
-    background: linear-gradient(135deg, var(--color-primary) 0%, #4a5a8f 100%);
+    background: var(--bg-light);
     border-color: var(--primary);
-    color: #fff;
+    color: var(--primary);
 }
 
 .new-client-btn {
