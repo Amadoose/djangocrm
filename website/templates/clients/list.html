@@ -1,23 +1,18 @@
 {% extends "base.html" %}
 {% load static %}
-<img src="{% get_static_prefix %}flags/{{ cliente.nacionalidad }}.gif" alt="{{ cliente.nacionalidad }}" class="country-flag">
 {% block title %} Client List {% endblock %}
 {% block content %}
 
 {% block extra_head %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/client_list.css' %}">
-<!-- Add these libraries -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
-
 {% endblock %}
 
 <div class="container-fluid px-4 py-3">
     <!-- Header Section -->
      <h2 class="page-title">Clients</h2>
     <div class="list-header">        
-        <div class="header-left">
-            
+        <div class="header-left">            
             <p class="client-count"> Manage your entire client portfolio</p>
             <p class="client-count">|</p>
             <span class="client-count" id="clientCount">{{ clientes|length }} clients</span>

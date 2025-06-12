@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import SignUpForm, ClienteForm, AddRecordForm
 from .models import Record, Cliente
 import random
+from django.contrib.auth.models import User
 
 # This file defines the views for the 'website' app in the DCRM project.
 
@@ -153,6 +154,15 @@ def update_client(request, pk):
     return render(request, 'clients/client_form.html', {'form': form, 'is_update': True})
 
 
+# # # # # # # #
+# CUSTOMERS VIEWS #
+# # # #  #######
+def users(request):
+    if not request.user.is_authenticated:
+        return redirect('login')    
+    users = User.objects.all()
+    return render(request, 'users/users_list.html', {'users': users})
+
 #########
 #WORK IN PROGRESS
 ###########
@@ -165,12 +175,6 @@ def quote(request):
     ]
     selected_image = random.choice(images)
     return render(request, 'quote.html', {'selected_image': selected_image})
-
-def users(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    records = Record.objects.all()  # Fetch all records from the database
-    return render(request, 'users.html', {'records': records })
 
 def reports(request):
     images = [

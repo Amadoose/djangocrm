@@ -79,10 +79,6 @@
 
     <!-- Topbar -->
     <div class="topbar" id="topbar">
-        <!-- Sidebar Toggle Button -->
-        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
-            <i class="bi bi-list"></i>
-        </button>
         <!-- Right: user info -->         
         <div class="d-flex align-items-center gap-3 ms-auto">
             <span class="fw-semibold d-none d-sm-inline">{{ request.user.username }}</span>
@@ -92,15 +88,7 @@
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">     
-        <div class="content-area">
-            {% if request.resolver_match.url_name != 'clients' and request.resolver_match.url_name != 'client_detail' and request.resolver_match.url_name != 'new_client' %}
-                <div class="d-flex align-items-left justify-content-left mb-4" style="padding: 0px 2px 10px 10px;">
-                    <h2 class="fw-bold m-0 page-title" style="font-size:2rem; color:#536192; letter-spacing:0.5px;">
-                        {{ page_title }}
-                    </h2>
-                </div>
-            {% endif %}
-           
+        <div class="content-area">           
             {% block content %} {% endblock %}
         </div>
     </div>

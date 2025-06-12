@@ -9,7 +9,7 @@ urlpatterns = [
     path('login/', views.login_user, name='login'), 
     path('logout/', views.logout_user, name='logout'),    
 
-    ### CUSTOMER URLS      
+    ### CLIENT URLS      
     path('clients/', views.c_list, name='clients'),     
     path('clients/new/', views.new_client, name='new_client'),
     # Detail view
@@ -17,8 +17,10 @@ urlpatterns = [
     # Edit view
     path('clients/update_client/<int:pk>/', views.update_client, name='update_client'),
 
+    ### USER URLS
+    path('users/', views.users, name='users'),    
+
     ### functionality
-    path('users/', views.users, name='users'),
     path('register/', views.register_user, name='register'),  
     path('record/<int:pk>', views.customer_record, name='record'),  
     path('delete_record/<int:pk>', views.delete_record, name='delete_record'),              

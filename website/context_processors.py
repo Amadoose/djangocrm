@@ -2,9 +2,7 @@ def page_title(request):
     # Map URL names to titles
     url_titles = {
         'home': 'Home',
-        'quote': 'New Quote',
-        'clients': '',
-        'users': 'Users',
+        'quote': 'New Quote',                
         'reports': 'Reports',
         'administration': 'Administration',
         'new_client': '',
