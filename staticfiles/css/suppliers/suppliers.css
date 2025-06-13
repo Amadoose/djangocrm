@@ -1,0 +1,546 @@
+/* suppliers.css - Matching u_list.css styling */
+
+:root {
+    --primary: #2c3247;
+    --text-dark: #1d1d1f;
+    --text-muted: #86868b;
+    --text-medium: #424245;
+    --border: #d2d2d7;
+    --border-light: #f5f5f7;
+    --bg-light: #f5f5f7;
+    --bg-hover: #e8e8ed;
+    --transition: all 0.2s ease;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --color-primary: #5361d9;
+}
+
+/* Header & Navigation */
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Page Title */
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-dark);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin-top: -20px;
+    margin-left: -20px;
+    margin-bottom: 24px;
+}
+
+/* Service Filter Buttons */
+.filter-btn {
+    position: relative;
+    background: none;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;       
+}
+
+.filter-btn:hover {
+    background: var(--bg-light);
+    border-color: #c7c7cc;
+    transform: translateY(-1px);
+    border-radius: 50px;
+}
+
+.filter-btn.active {
+    background: none;
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.filter-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 4px;
+    background: var(--primary);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.filter-btn.active::after {
+    width: 100%;
+}
+
+.page-subtitle {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #5c5d7a;
+}
+
+/* Service Tables */
+.service-table {
+    display: none;
+    margin-bottom: 32px;
+}
+
+.service-table.active {
+    display: block;
+}
+
+/* Table Header */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 0 4px;
+}
+
+.table-header h4 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+    letter-spacing: -0.3px;
+}
+
+.table-header div {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Action Buttons */
+.btn-add-row, .btn-save {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font: 500 14px/1 "Segoe UI", Roboto, sans-serif;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    letter-spacing: 0.01em;
+}
+
+.btn-add-row {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #4a5a8f 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(83, 97, 146, 0.3);
+}
+
+.btn-add-row:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(83, 97, 146, 0.4);
+}
+
+.btn-save {
+    background: #fff;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.btn-save:hover {
+    background: var(--bg-light);
+    transform: translateY(-1px);
+}
+
+/* Table Styles */
+.editable-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-light);
+}
+
+/* Table Header */
+.editable-table thead th {
+    background: var(--bg-light);
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-dark);
+    border-bottom: 1px solid #e5e5e7;
+    white-space: nowrap;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Table Body */
+.editable-table tbody tr {
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.editable-table tbody tr:hover {
+    background: #f9f9fb;
+}
+
+.editable-table tbody tr:active {
+    background: #f0f0f2;
+}
+
+.editable-table tbody td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: middle;
+    position: relative;
+}
+
+.editable-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Editable Cell Styles */
+.editable-table tbody td[contenteditable="true"] {
+    cursor: text;
+    transition: var(--transition);
+}
+
+.editable-table tbody td[contenteditable="true"]:focus {
+    background: #fff;
+    outline: 2px solid var(--primary);
+    outline-offset: -2px;
+    border-radius: 4px;
+}
+
+.editable-table tbody td[contenteditable="true"]:hover {
+    background: var(--bg-light);
+}
+
+/* Special Cell Styles */
+.id-cell {
+    width: 80px;
+    display: none;  
+}
+
+td.id-cell {
+  display: none;
+}
+
+.id-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font: 600 12px/1 monospace;
+    background: #fff;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+}
+
+/* Email and URL cells */
+.email-cell, .url-cell {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.email-link, .url-link {
+    color: #578ef8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.email-link:hover, .url-link:hover {
+    color: #0051d8;
+    text-decoration: underline;
+}
+
+/* Phone cells */
+.phone-cell {
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--text-medium);
+}
+
+/* Status cells */
+.status-cell {
+    text-align: center;
+    width: 80px;
+}
+
+.status-active {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.status-inactive {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+/* Dropdown/Select styling */
+.table-select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    font-size: 14px;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.table-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(83, 97, 146, 0.1);
+}
+
+/* Action Buttons in Rows */
+.row-actions {
+    width: 120px;
+    text-align: center;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 14px;
+}
+
+.edit-btn {
+    background: #fff;
+    border: 1px solid #ffc107;
+    color: #ffc107;
+}
+
+.edit-btn:hover {
+    background: #ffeaa7;
+    color: #533d04;
+    transform: translateY(-1px);
+}
+
+.delete-btn {
+    background: #fff;
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
+
+.delete-btn:hover {
+    background: #f8d7da;
+    color: #721c24;
+    transform: translateY(-1px);
+}
+
+.save-btn {
+    background: #fff;
+    border: 1px solid #28a745;
+    color: #28a745;
+}
+
+.save-btn:hover {
+    background: #d4edda;
+    color: #155724;
+    transform: translateY(-1px);
+}
+
+.cancel-btn {
+    background: #fff;
+    border: 1px solid var(--text-muted);
+    color: var(--text-muted);
+}
+
+.cancel-btn:hover {
+    background: var(--bg-light);
+    color: var(--text-dark);
+    transform: translateY(-1px);
+}
+
+/* Input field styling for editing */
+.table-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 14px;
+    background: #fff;
+    transition: var(--transition);
+}
+
+.table-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(83, 97, 146, 0.1);
+}
+
+/* Checkbox styling */
+.table-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--primary);
+}
+
+/* Number input styling */
+.table-number {
+    text-align: right;
+    font-family: monospace;
+}
+
+/* Loading state */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Error states */
+.error-cell {
+    background: #f8d7da !important;
+    color: #721c24;
+}
+
+.success-cell {
+    background: #d4edda !important;
+    color: #155724;
+}
+
+/* Empty state */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-state h4 {
+    font: 600 20px/1 "Segoe UI", Roboto, sans-serif;
+    color: var(--text-medium);
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .list-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+    }
+    
+    .header-left {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .table-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    
+    .table-header div {
+        justify-content: center;
+    }
+    
+    .editable-table {
+        font-size: 13px;
+    }
+    
+    .editable-table thead th,
+    .editable-table tbody td {
+        padding: 12px 16px;
+    }
+    
+    .page-title {
+        font-size: 24px;
+        text-align: center;
+        margin-left: 0;
+    }
+    
+    /* Stack table actions vertically on mobile */
+    .action-buttons {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-btn {
+        flex: 1;
+        justify-content: center;
+        min-width: 0;
+    }
+    
+    .btn-add-row,
+    .btn-save {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Make table horizontally scrollable on very small screens */
+    .editable-table {
+        min-width: 600px;
+    }
+    
+    .service-table {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}

@@ -1,109 +1,106 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
+{% block title %} User List {% endblock %}
 {% block content %}
-
 
 {% block extra_head %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/users/u_list.css' %}">
 {% endblock %}
 
-<div class="container-fluid px-4 py-3"> 
+<div class="container-fluid px-4 py-3"> {% comment %} main div {% endcomment %}
     <!-- Header Section -->
-    <h2 class="page-title">Users</h2>
+    <h2 class="page-title">Clients</h2>
     <div class="list-header">        
         <div class="header-left">            
-            <p class="client-count"> Manage users with access to this platform </p>
+            <p class="client-count"> Manage users</p>
             <p class="client-count">|</p>
-            <span class="client-count" id="clientCount">{{ clientes|length }} clients</span>
+            <span class="client-count" id="clientCount">{{ users|length }} users</span>
         </div>
         <div class="header-right">
             <div class="search-container">
                 <i class="bi bi-search search-icon"></i>
-                <input type="text" class="search-input" id="searchInput" placeholder="Search user...">
-            </div>
-            <a href="{% url 'add_record' %}" class="btn-link">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search users...">
+            </div>   
+            <a href="{% url 'new_user' %}" class="btn-link">
                 <button class='new-client-btn'>
                     <i class="bi bi-plus"></i>
                     <span>New User</span>
                 </button>
             </a>
         </div>
-    </div>   
-<!-- Table Container -->
-<div class="table-container">
-    <div class="modern-table-wrapper">
-        <table class="modern-table" id="userTable">
-            <thead>
-                <tr>
-                    <th data-column="username" class="sortable">
-                        <span>Username</span>
-                        <i class="bi bi-chevron-expand sort-icon"></i>
-                    </th>
-                    <th data-column="first_name" class="sortable">
-                        <span>First Name</span>
-                        <i class="bi bi-chevron-expand sort-icon"></i>
-                    </th>
-                    <th data-column="last_name" class="sortable">
-                        <span>Last Name</span>
-                        <i class="bi bi-chevron-expand sort-icon"></i>
-                    </th>
-                    <th data-column="email" class="sortable">
-                        <span>Email</span>
-                        <i class="bi bi-chevron-expand sort-icon"></i>
-                    </th>
-                    <th data-column="is_staff" class="sortable">
-                        <span>Permission</span>
-                        <i class="bi bi-chevron-expand sort-icon"></i>
-                    </th>
-                    <th class="actions-column"></th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                {% for user in users %}
-                <tr class="table-row">
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.first_name }}</td>
-                    <td>{{ user.last_name }}</td>
-                    <td>
-                        <a href="mailto:{{ user.email }}" class="email-link" onclick="event.stopPropagation();">
-                            {{ user.email }}
-                        </a>
-                    </td>
-                    <td>
-                        {% if user.is_superuser %}
-                            <span class="badge bg-danger">Superuser</span>
-                        {% elif user.is_staff %}
-                            <span class="badge bg-warning text-dark">Staff</span>
-                        {% else %}
-                            <span class="badge bg-secondary">User</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
+    </div>    {% comment %} header div {% endcomment %}
 
+    <!-- Table Container -->
+    <div class="table-container">
+        <div class="modern-table-wrapper">
+            <table class="modern-table" id="clientTable">
+                <thead> <!-- COLUMNAS -->
+                    <tr>
+                        <th data-column="username" class="sortable">
+                            <span>Username</span>
+                            <i class="bi bi-chevron-expand sort-icon"></i>
+                        </th>
+                        <th data-column="first_name" class="sortable">
+                            <span>Name</span>
+                            <i class="bi bi-chevron-expand sort-icon"></i>
+                        </th>
+                        <th data-column="last_name" class="sortable">
+                            <span>Paternal Last Name</span>
+                            <i class="bi bi-chevron-expand sort-icon"></i>
+                        </th> 
+                        <th data-column="email" class="sortable">
+                            <span>Email</span>
+                            <i class="bi bi-chevron-expand sort-icon"></i>
+                        </th>
+                        <th data-column="permission" class="sortable">
+                            <span>Permission</span>
+                            <i class="bi bi-chevron-expand sort-icon"></i>
+                        </th>                                                
+                        <!--<th class="actions-column"></th>   -->
+                    </tr>
+                </thead> <!-- COLUMNAS -->
+                <tbody id="tableBody">
+                    {% for user in users %}                
+                    <tr class="table-row" data-user-id="{{ user.pk }}" onclick="window.location.href='{% url 'user_detail' user.pk %}'">
+                        <td data-column="username">{{ user.username }}</td>
+                        <td data-column="first_name">{{ user.first_name }}</td>
+                        <td data-column="last_name">{{ user.last_name }}</td>
+                        <td data-column="email"> <a href="mailto:{{ user.email }}" class="email-link" onclick="event.stopPropagation();"> {{ user.email }} </a>
+                        </td>
+                        <td data-column="permission">
+                            {% if user.is_superuser %}
+                                <span class="badge bg-danger">Superuser</span>
+                            {% elif user.is_staff %}
+                                <span class="badge bg-warning text-dark">Staff</span>
+                            {% else %}
+                                <span class="badge bg-secondary">User</span>
+                            {% endif %}
+                        </td>
+                        <!-- <td class="actions-cell">
+                            <div class="action-buttons">
+                                <a href="{% url 'user_detail' user.pk %}" class="action-btn view-btn" onclick="event.stopPropagation();" title="View User">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{% url 'update_user' user.pk %}" class="action-btn edit-btn" onclick="event.stopPropagation();" title="Edit User">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </div>
+                        </td>-->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-    </div>
-
+    </div> <!-- Table Container -->
     <!-- Empty State -->
     <div class="empty-state" id="emptyState" style="display: none;">
         <div class="empty-icon">
             <i class="bi bi-search"></i>
         </div>
-        <h4>No clients found</h4>
+        <h4>No users found</h4>
         <p>Try adjusting your search or filter criteria</p>
         <button class="clear-filters-btn" onclick="clearAllFilters()">Clear Filters</button>
-    </div>
-</div>
-
-<script src="{% static 'js/c_list.js' %}"></script>
-
-    
-{% comment %} end div {% endcomment %}   
-</div>
-
-
+    </div>    
+</div> {% comment %} main div {% endcomment %}
+<script src="{% static 'js/users/u_list.js' %}"></script>
 {% endblock %}

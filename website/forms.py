@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import Record, Cliente
+from .models import Cliente
 from django_countries.widgets import CountrySelectWidget
 
 class ClienteForm(forms.ModelForm): 
@@ -121,17 +121,4 @@ class SignUpForm(UserCreationForm):
             'username': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Username'}),
             'password1': forms.PasswordInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Password'}),
             'password2': forms.PasswordInput(attrs={'class': 'form-control form-control-sm', 'placeholder': 'Confirm Password'}),
-        }
-
-#Add record form class
-class AddRecordForm(forms.ModelForm):
-    class Meta:
-        model = Record
-        exclude = (User,)
-        fields = ['first_name', 'last_name', 'email', 'phone']
-        widgets = {            
-            'first_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': ''}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': ''}),
-            'phone': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': ''}),
-            'email': forms.TextInput(attrs={'class': 'form-control form-control-sm', 'placeholder': ''}),
         }

@@ -1,7 +1,5 @@
 # customers/utils.py
-import requests, json
-from django.conf import settings
-from django.contrib.staticfiles import finders
+import requests
 
 
 def fetch_country_choices():
@@ -12,4 +10,3 @@ def fetch_country_choices():
     except Exception:
         return [('MX', '🇲🇽 Mexico'), ('US', '🇺🇸 United States'), ('CA', '🇨🇦 Canada')]
     
-

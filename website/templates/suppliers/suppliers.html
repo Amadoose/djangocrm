@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/suppliers/suppliers.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid px-4 py-3">
+    <!-- Header Section -->
+    <h2 class="page-title">Suppliers</h2>
+    <div class="list-header">        
+        <div class="header-left">                    
+            <button class="filter-btn" data-service="hotels" onclick="toggleServiceTable(this, 'hotels')">
+                <span class="page-subtitle">Hoteles</span>
+            </button>    
+            <button class="filter-btn" data-service="airlines" onclick="toggleServiceTable(this, 'airlines')">
+                <span class="page-subtitle">Aerolineas</span>
+            </button>    
+            <button class="filter-btn" data-service="activities" onclick="toggleServiceTable(this, 'activities')">
+                <span class="page-subtitle">Actividades</span>
+            </button>    
+            <button class="filter-btn" data-service="operators" onclick="toggleServiceTable(this, 'operators')">
+                <span class="page-subtitle">Operadores</span>
+            </button>    
+            <button class="filter-btn" data-service="transports" onclick="toggleServiceTable(this, 'transports')">
+                <span class="page-subtitle">Otro Transporte</span>
+            </button>                                                    
+        </div>
+    </div>   
+
+    <!-- Service Tables -->
+    <div id="hotels-table" class="service-table">
+        <div class="table-header">          
+            <div>
+                <button class="btn-add-row" onclick="addNewRow('hotels')"><i class="bi bi-plus-circle"></i></button>
+                <button class="btn-save" onclick="saveAllChanges('hotels')"><i class="bi bi-check-square"></i></button>
+            </div>
+        </div>
+        <div class="table-container">
+            <div class="modern-table-wrapper">
+                <table class="editable-table modern-table">
+                    <thead>
+                        <tr>
+                            <th class="id-cell">ID</th>
+                            <th>Name</th>                           
+                            <th>Location</th>
+                            <th class="email-cell">Contact Email</th>
+                            <th class="phone-cell">Phone</th>
+                            <th>Rating</th>
+                            <th>Amenities</th>
+                            <th class="url-cell">Website</th>
+                            <th class="table-number">Price/Night</th>
+                            <th class="status-cell">Active</th>                            
+                        </tr>
+                    </thead>
+                    <tbody id="hotels-tbody">
+                        <!-- Data will be loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="airlines-table" class="service-table">
+        <div class="table-header">            
+            <div>
+                <button class="btn-add-row" onclick="addNewRow('airlines')"><i class="bi bi-plus-square"></i></button>
+                <button class="btn-save" onclick="saveAllChanges('airlines')"><i class="bi bi-check-square"></i></button>
+            </div>
+        </div>
+        <div class="table-container">
+            <div class="modern-table-wrapper">
+                <table class="editable-table modern-table">
+                    <thead>
+                        <tr>
+                            <th class="id-cell">ID</th>
+                            <th>Nombre</th>
+                            <th>Código IATA</th>
+                            <th>País</th>
+                            <th class="phone-cell">Teléfono</th>
+                            <th class="url-cell">Website</th>
+                            <th class="status-cell">Activo</th>                            
+                        </tr>
+                    </thead>
+                    <tbody id="airlines-tbody">
+                        <!-- Data will be loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="activities-table" class="service-table">
+        <div class="table-header">            
+            <div>
+                <button class="btn-add-row" onclick="addNewRow('activities')"><i class="bi bi-plus-square"></i></button>
+                <button class="btn-save" onclick="saveAllChanges('activities')"><i class="bi bi-check-square"></i></button>
+            </div>
+        </div>
+        <div class="table-container">
+            <div class="modern-table-wrapper">
+                <table class="editable-table modern-table">
+                    <thead>
+                        <tr>
+                            <th class="id-cell">ID</th>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Ubicación</th>
+                            <th>Duración</th>
+                            <th class="table-number">Precio</th>
+                            <th class="table-number">Capacidad</th>
+                            <th>Proveedor</th>                           
+                        </tr>
+                    </thead>
+                    <tbody id="activities-tbody">
+                        <!-- Data will be loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="operators-table" class="service-table">
+        <div class="table-header">            
+            <div>
+                <button class="btn-add-row" onclick="addNewRow('operators')"><i class="bi bi-plus-square"></i></button>
+                <button class="btn-save" onclick="saveAllChanges('operators')"><i class="bi bi-check-square"></i></button>
+            </div>
+        </div>
+        <div class="table-container">
+            <div class="modern-table-wrapper">
+                <table class="editable-table modern-table">
+                    <thead>
+                        <tr>
+                            <th class="id-cell">ID</th>
+                            <th>Nombre</th>
+                            <th>Tipo de Servicio</th>
+                            <th>Ubicación</th>
+                            <th class="email-cell">Email de Contacto</th>
+                            <th class="phone-cell">Teléfono</th>
+                            <th class="url-cell">Website</th>
+                            <th>Especialización</th>
+                            <th class="status-cell">Activo</th>                            
+                        </tr>
+                    </thead>
+                    <tbody id="operators-tbody">
+                        <!-- Data will be loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="transports-table" class="service-table">
+        <div class="table-header">            
+            <div>
+                <button class="btn-add-row" onclick="addNewRow('transports')"><i class="bi bi-plus-square"></i></button>
+                <button class="btn-save" onclick="saveAllChanges('transports')"><i class="bi bi-check-square"></i></button>
+            </div>
+        </div>
+        <div class="table-container">
+            <div class="modern-table-wrapper">
+                <table class="editable-table modern-table">
+                    <thead>
+                        <tr>
+                            <th class="id-cell">ID</th>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Ubicación</th>
+                            <th class="email-cell">Email de Contacto</th>
+                            <th class="phone-cell">Teléfono</th>
+                            <th class="url-cell">Website</th>
+                            <th class="table-number">Capacidad</th>
+                            <th class="table-number">Precio por Unidad</th>
+                            <th class="status-cell">Activo</th>                            
+                        </tr>
+                    </thead>
+                    <tbody id="transports-tbody">
+                        <!-- Data will be loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div><!-- END DIV -->
+
+<script src="{% static 'js/suppliers/suppliers.js' %}"></script>
+{% endblock %}
+
