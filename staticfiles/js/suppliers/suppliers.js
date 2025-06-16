@@ -665,3 +665,22 @@ window.addEventListener('scroll', function() {
         scrollBtn.classList.remove('visible');
     }
 });
+
+document.addEventListener('click', function(e) {
+    // When opening a dropdown, add class to parent row
+    if (e.target.classList.contains('amenities-trigger')) {
+        // Remove active class from all rows
+        document.querySelectorAll('.editable-table tbody tr').forEach(row => {
+            row.classList.remove('dropdown-active');
+        });
+        // Add active class to current row
+        e.target.closest('tr').classList.add('dropdown-active');
+    }
+    
+    // When clicking outside, remove all active classes
+    if (!e.target.closest('.amenities-dropdown')) {
+        document.querySelectorAll('.editable-table tbody tr').forEach(row => {
+            row.classList.remove('dropdown-active');
+        });
+    }
+});

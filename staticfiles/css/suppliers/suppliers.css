@@ -1,4 +1,4 @@
-/* suppliers.css - Matching u_list.css styling */
+/* suppliers.css - Cleaned version */
 
 :root {
     --primary: #2c3247;
@@ -11,15 +11,6 @@
     --bg-hover: #e8e8ed;
     --transition: all 0.2s ease;
     --shadow: 0 4px 20px rgba(0,0,0,0.08);
-    --color-primary: #5361d9;
-}
-
-/* Ensure buttons maintain original styling */
-.filter-btn {
-    all: unset; /* Reset all browser defaults */
-    /* Your original button styles here */
-    cursor: pointer;
-    /* Add any other original styles */
 }
 
 /* Header & Navigation */
@@ -48,6 +39,12 @@
     margin-top: -20px;
     margin-left: -20px;
     margin-bottom: 24px;
+}
+
+.page-subtitle {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #5c5d7a;
 }
 
 /* Service Filter Buttons */
@@ -90,12 +87,6 @@
     width: 100%;
 }
 
-.page-subtitle {
-    font-size: 1rem;
-    font-weight: 400;
-    color: #5c5d7a;
-}
-
 /* Service Tables */
 .service-table {
     display: none;
@@ -113,14 +104,6 @@
     align-items: center;
     margin-bottom: 16px;
     padding: 0 4px;
-}
-
-.table-header h4 {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin: 0;
-    letter-spacing: -0.3px;
 }
 
 .table-header div {
@@ -141,9 +124,6 @@
     transition: var(--transition);
     border: none;
     letter-spacing: 0.01em;
-}
-
-.btn-add-row {
     background: #fff;
     color: var(--primary);
     border: 1px solid var(--primary);
@@ -153,12 +133,6 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(83, 97, 146, 0.4);
     background: #fcf5e0; 
-}
-
-.btn-save {
-    background: #fff;
-    color: var(--primary);
-    border: 1px solid var(--primary);   
 }
 
 .btn-save:hover {
@@ -174,9 +148,12 @@
     font-size: 14px;
     background: #fff;
     border-radius: 12px;
-    overflow: hidden;
+    overflow: visible;
     box-shadow: var(--shadow);
     border: 1px solid var(--border-light);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Table Header */
@@ -197,6 +174,8 @@
 .editable-table tbody tr {
     transition: var(--transition);
     cursor: pointer;
+    position: relative;
+    z-index: 1;
 }
 
 .editable-table tbody tr:hover {
@@ -207,32 +186,45 @@
     background: #f0f0f2;
 }
 
-.editable-table tbody td {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border-light);
-    vertical-align: middle;
-    position: relative;
-}
-
 .editable-table tbody tr:last-child td {
     border-bottom: none;
 }
 
-/* Editable Cell Styles */
-.editable-table tbody td[contenteditable="true"] {
-    cursor: text;
-    transition: var(--transition);
+.editable-table tbody td {
+    padding: 14px 18px;
+    border-bottom: 0.5px solid #e5e5e7;
+    background: #f8f9fa;
+    border: 1px solid #e8e8ed;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 400;
+    color: #1d1d1f;
+    line-height: 1.47;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    position: relative;
+    z-index: 1;
 }
 
-.editable-table tbody td[contenteditable="true"]:focus {
-    background: #fff;
-    outline: 2px solid var(--primary);
-    outline-offset: -2px;
-    border-radius: 4px;
+.editable-table tbody td:hover {
+    background: #ffffff;
+    border: 1px solid #c7c7cc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
 }
 
-.editable-table tbody td[contenteditable="true"]:hover {
-    background: var(--bg-light);
+/* Editable Cell Focus Styles */
+.editable-table tbody td[contenteditable="true"]:focus,
+.editable-cell:focus {
+    background: #ffffff;
+    border: 2.5px solid #007aff;
+    border-radius: 14px;
+    outline: none;
+    box-shadow: 0 0 0 6px rgba(0, 122, 255, 0.12), 0 4px 16px rgba(0, 0, 0, 0.1);
+    padding: 12.5px 16.5px;
+    font-size: 15px;
+    font-weight: 400;
+    color: #1d1d1f;
+    transform: translateY(-2px);
 }
 
 /* Special Cell Styles */
@@ -242,17 +234,7 @@
 }
 
 td.id-cell {
-  display: none;
-}
-
-.id-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font: 600 12px/1 monospace;
-    background: #fff;
-    border: 1px solid var(--primary);
-    color: var(--primary);
+    display: none;
 }
 
 /* Email and URL cells */
@@ -261,17 +243,6 @@ td.id-cell {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-.email-link, .url-link {
-    color: #578ef8;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.email-link:hover, .url-link:hover {
-    color: #0051d8;
-    text-decoration: underline;
 }
 
 /* Phone cells */
@@ -287,203 +258,185 @@ td.id-cell {
     width: 80px;
 }
 
-.status-active {
-    color: #28a745;
-    font-weight: 600;
-}
-
-.status-inactive {
-    color: #dc3545;
-    font-weight: 600;
-}
-
-/* Dropdown/Select styling */
-.table-select {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: #fff;
-    font-size: 14px;
-    color: var(--text-dark);
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.table-select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(83, 97, 146, 0.1);
-}
-
-/* Action Buttons in Rows */
-.row-actions {
-    width: 120px;
-    text-align: center;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 4px;
-    justify-content: center;
-    align-items: center;
-}
-
-.action-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition);
-    font-size: 14px;
-}
-
-.edit-btn {
-    background: #fff;
-    border: 1px solid #ffc107;
-    color: #ffc107;
-}
-
-.edit-btn:hover {
-    background: #ffeaa7;
-    color: #533d04;
-    transform: translateY(-1px);
-}
-
-.delete-btn {
-    background: #fff;
-    border: 1px solid #dc3545;
-    color: #dc3545;
-}
-
-.delete-btn:hover {
-    background: #f8d7da;
-    color: #721c24;
-    transform: translateY(-1px);
-}
-
-.save-btn {
-    background: #fff;
-    border: 1px solid #28a745;
-    color: #28a745;
-}
-
-.save-btn:hover {
-    background: #d4edda;
-    color: #155724;
-    transform: translateY(-1px);
-}
-
-.cancel-btn {
-    background: #fff;
-    border: 1px solid var(--text-muted);
-    color: var(--text-muted);
-}
-
-.cancel-btn:hover {
-    background: var(--bg-light);
-    color: var(--text-dark);
-    transform: translateY(-1px);
-}
-
-/* Input field styling for editing */
-.table-input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    font-size: 14px;
-    background: #fff;
-    transition: var(--transition);
-}
-
-.table-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(83, 97, 146, 0.1);
-}
-
-/* Checkbox styling */
-.table-checkbox {
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    accent-color: var(--primary);
-}
-
-/* Number input styling */
+/* Number cells */
 .table-number {
     text-align: right;
     font-family: monospace;
 }
 
-/* Loading state */
-.loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
+/* Select/Dropdown styling */
+.editable-cell {
+    background: #ffffff;
+    border: 1px solid #c7c7cc;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 15px;
+    font-weight: 400;
+    color: #1d1d1f;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.loading-spinner {
-    width: 24px;
-    height: 24px;
-    border: 2px solid var(--border);
-    border-top-color: var(--primary);
+.editable-cell:hover {
+    border-color: #a1a1a6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Scroll to top button */
+.scroll-top-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    background: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: none;
+    z-index: 99;
 }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
+.scroll-top-btn.visible {
+    display: block;
 }
 
-/* Error states */
-.error-cell {
-    background: #f8d7da !important;
-    color: #721c24;
+/* Amenities Dropdown Styles */
+.amenities-dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    z-index: 1000;
 }
 
-.success-cell {
-    background: #d4edda !important;
-    color: #155724;
-}
-
-/* Empty state */
-.empty-state {
+.amenities-trigger {
+    padding: 14px 18px;
+    border: 1px solid #c7c7cc;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    padding: 60px 20px;
-    text-align: center;
-    color: var(--text-muted);
+    width: 100%;
+    font-size: 15px;
+    font-weight: 400;
+    color: #1d1d1f;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.empty-icon {
-    font-size: 48px;
-    margin-bottom: 16px;
-    opacity: 0.5;
+.amenities-trigger:hover {
+    border-color: #a1a1a6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.empty-state h4 {
-    font: 600 20px/1 "Segoe UI", Roboto, sans-serif;
-    color: var(--text-medium);
-    margin-bottom: 8px;
+.amenities-trigger::after {
+    content: "▼";
+    font-size: 12px;
+    color: #a1a1a6;
+    margin-left: 8px;
+    transition: transform 0.2s ease;
 }
 
-.empty-state p {
-    font-size: 14px;
-    margin-bottom: 20px;
+.amenities-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 280px;
+    border: 1px solid #c7c7cc;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    z-index: 2000;
+    max-height: 300px;
+    overflow-y: auto;
+    width: 80%;
+    bottom: 70%;
+    margin-bottom: 4px;
+    left: 0;
+}
+
+.amenities-dropdown-content.show {
+    display: block;
+}
+
+.amenities-dropdown-content.show ~ .amenities-trigger::after {
+    transform: rotate(180deg);
+}
+
+.amenity-option {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 15px;
+    color: #1d1d1f;
+    transition: background-color 0.2s ease;
+}
+
+.amenity-option:hover {
+    background-color: #f8f9fa;
+}
+
+.amenity-option:first-child {
+    border-radius: 12px 12px 0 0;
+}
+
+.amenity-option:last-child {
+    border-radius: 0 0 12px 12px;
+}
+
+.amenity-checkbox {
+    margin-right: 12px;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid #c7c7cc;
+    border-radius: 4px;
+    background: #ffffff;
+    -webkit-appearance: none;
+    appearance: none;
+    position: relative;
+}
+
+.amenity-checkbox:checked {
+    background: #007aff;
+    border-color: #007aff;
+}
+
+.amenity-checkbox:checked::after {
+    content: "✓";
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.selected-amenities {
+    white-space: nowrap;    
+    text-overflow: ellipsis;
+    flex-grow: 1;
+    display: inline-block;
+    max-width: 200px;
+    overflow: hidden;
+}
+
+/* Table container for dropdown overflow */
+.table-container,
+.modern-table-wrapper {
+    position: relative;
+    overflow: visible !important;
+}
+
+/* Dropdown active row */
+.editable-table tbody tr.dropdown-active {
+    z-index: 2000;
+    position: relative;
 }
 
 /* Responsive Design */
@@ -523,12 +476,6 @@ td.id-cell {
         text-align: center;
         margin-left: 0;
     }
-    
-    /* Stack table actions vertically on mobile */
-    .action-buttons {
-        flex-direction: column;
-        gap: 4px;
-    }
 }
 
 @media (max-width: 480px) {
@@ -554,88 +501,3 @@ td.id-cell {
         -webkit-overflow-scrolling: touch;
     }
 }
-
-.scroll-top-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #333;
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: none;
-    z-index: 99;
-}
-
-.scroll-top-btn.visible {
-    display: block;
-}
-
-* Amenities Dropdown Styles */
-.amenities-dropdown {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-}
-
-.amenities-trigger {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background: white;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-.amenities-trigger::after {
-    content: "▼";
-    font-size: 10px;
-    margin-left: 8px;
-}
-
-.amenities-dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white;
-    min-width: 200px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-    z-index: 100;
-    max-height: 300px;
-    overflow-y: auto;
-    width: 100%;
-}
-
-.amenities-dropdown-content.show {
-    display: block;
-}
-
-.amenity-option {
-    padding: 8px 16px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.amenity-option:hover {
-    background-color: #f5f5f5;
-}
-
-.amenity-checkbox {
-    margin-right: 8px;
-}
-
-.selected-amenities {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex-grow: 1;
-}
-
