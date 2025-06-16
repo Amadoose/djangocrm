@@ -1,11 +1,26 @@
 {% extends "base.html" %}
 {% load static %}
+{% load url_helpers %}  
+
 {% block title %} Client List {% endblock %}
 {% block content %}
 
 {% block extra_head %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/client_list.css' %}">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+<style>
+    .sort-link {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .sort-link:hover {
+        text-decoration: none;
+        color: var(--primary);
+    }
+</style>
 {% endblock %}
 
 <div class="container-fluid px-4 py-3">
@@ -15,12 +30,12 @@
         <div class="header-left">            
             <p class="client-count"> Manage your entire client portfolio</p>
             <p class="client-count">|</p>
-            <span class="client-count" id="clientCount">{{ clientes|length }} clients</span>
+            <span class="client-count" id="clientCount">{{ total_count }} clients</span>
         </div>
         <div class="header-right">
             <div class="search-container">
                 <i class="bi bi-search search-icon"></i>
-                <input type="text" class="search-input" id="searchInput" placeholder="Search clients...">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search clients..." value="{{ current_search|default:'' }}">
             </div>
             <!-- Add Export Buttons -->
             <div class="export-buttons">
@@ -34,10 +49,6 @@
                     <i class="bi bi-file-excel"></i>
                 </button>
             </div>            
-            <button class="filter-btn" id="filterToggle">
-                <i class="bi bi-funnel"></i>
-                <span>Filters</span>
-            </button>
             <a href="{% url 'new_client' %}" class="btn-link">
                 <button class='new-client-btn'>
                     <i class="bi bi-plus"></i>
@@ -47,77 +58,30 @@
         </div>
     </div>
 
-    <!-- Filter Panel -->
-    <div class="filter-panel" id="filterPanel">
-        <div class="filter-section">
-            <h6>Show Columns</h6>
-            <div class="column-toggles">
-                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="uncheckAll()">
-                    Uncheck All
-                </button>                
-                <label class="toggle-item">
-                    <input type="checkbox" checked data-column="id">
-                    <span>ID</span>
-                </label>
-                <label class="toggle-item">
-                    <input type="checkbox" checked data-column="name">
-                    <span>Name</span>
-                </label>
-                <label class="toggle-item">
-                    <input type="checkbox" checked data-column="paternal">
-                    <span>Paternal Last Name</span>
-                </label>
-                <label class="toggle-item">
-                    <input type="checkbox" checked data-column="maternal">
-                    <span>Maternal Last Name</span>
-                </label>
-                <label class="toggle-item">
-                    <input type="checkbox" checked data-column="email">
-                    <span>Email</span>
-                </label>
-                <label class="toggle-item">
-                    <input type="checkbox" checked data-column="phone">
-                    <span>Phone</span>
-                </label>
-                <label class="toggle-item">
-                    <input type="checkbox" checked data-column="nationality">
-                    <span>Nationality</span>
-                </label>         
-                <label class="toggle-item">
-                    <input type="checkbox" checked data-column="loyalty">
-                    <span>Loyalty Level</span>
-                </label>                       
-            </div>
-        </div>
-        <div class="filter-section">
-            <h6>Quick Filters</h6>
-            <div class="quick-filters">
-                <button class="filter-chip active" data-filter="all">All</button>
-                <button class="filter-chip" data-filter="recent">Recently Added</button> 
-            </div>
-        </div>
-        <div class="filter-actions">
-            <button class="clear-filters-btn" id="clearFilters">Clear All</button>
-        </div> 
-    </div>
-
     <div class="pagination-container">
         <div class="pagination-controls">
-            <button class="pagination-btn" id="prevBtn" disabled>
+            <!-- Previous Button -->
+            <a href="?{% if clientes.has_previous %}{% url_replace request 'page' clientes.previous_page_number %}{% else %}#{% endif %}" 
+            class="pagination-btn {% if not clientes.has_previous %}disabled{% endif %}" 
+            id="prevBtn">
                 <i class="bi bi-chevron-left"></i>
-            </button>
+            </a>
+            
             <div class="pagination-info">
-                <span id="pageInfo">1 of 1</span>
+                <span id="pageInfo">Page {{ clientes.number }} of {{ clientes.paginator.num_pages }}</span>
             </div>
-            <button class="pagination-btn" id="nextBtn" disabled>
+            
+            <!-- Next Button -->
+            <a href="?{% if clientes.has_next %}{% url_replace request 'page' clientes.next_page_number %}{% else %}#{% endif %}" 
+            class="pagination-btn {% if not clientes.has_next %}disabled{% endif %}" 
+            id="nextBtn">
                 <i class="bi bi-chevron-right"></i>
-            </button>
+            </a>
         </div>
         <div class="pagination-summary">
-            <span id="paginationSummary">Showing 1-50 of 0 clients</span>
+            <span id="paginationSummary">Showing {{ clientes.start_index }}-{{ clientes.end_index }} of {{ total_count }} clients</span>
         </div>
     </div>    
-
 
     <!-- Table Container -->
     <div class="table-container">
@@ -126,36 +90,52 @@
                 <thead>
                     <tr>
                         <th data-column="id" class="sortable">
-                            <span>ID</span>
-                            <i class="bi bi-chevron-expand sort-icon"></i>
+                            <a href="?{% toggle_sort request 'id' %}" class="sort-link">
+                                <span>ID</span>
+                                <i class="bi bi-chevron-{% if current_sort == 'id' %}up{% elif current_sort == '-id' %}down{% else %}expand{% endif %} sort-icon"></i>
+                            </a>
                         </th>
                         <th data-column="name" class="sortable">
-                            <span>Name</span>
-                            <i class="bi bi-chevron-expand sort-icon"></i>
+                            <a href="?{% toggle_sort request 'nombre' %}" class="sort-link">
+                                <span>Nombre</span>
+                                <i class="bi bi-chevron-{% if current_sort == 'nombre' %}up{% elif current_sort == '-nombre' %}down{% else %}expand{% endif %} sort-icon"></i>
+                            </a>
                         </th>
                         <th data-column="paternal" class="sortable">
-                            <span>Paternal Last Name</span>
-                            <i class="bi bi-chevron-expand sort-icon"></i>
+                            <a href="?{% toggle_sort request 'apellido_paterno' %}" class="sort-link">
+                                <span>Apellido Paterno</span>
+                                <i class="bi bi-chevron-{% if current_sort == 'apellido_paterno' %}up{% elif current_sort == '-apellido_paterno' %}down{% else %}expand{% endif %} sort-icon"></i>
+                            </a>                              
                         </th>
                         <th data-column="maternal" class="sortable">
-                            <span>Maternal Last Name</span>
-                            <i class="bi bi-chevron-expand sort-icon"></i>
+                            <a href="?{% toggle_sort request 'apellido_materno' %}" class="sort-link">
+                                <span>Apellido Materno</span>
+                                <i class="bi bi-chevron-{% if current_sort == 'apellido_materno' %}up{% elif current_sort == '-apellido_materno' %}down{% else %}expand{% endif %} sort-icon"></i>
+                            </a>   
                         </th>
                         <th data-column="email" class="sortable">
-                            <span>Email</span>
-                            <i class="bi bi-chevron-expand sort-icon"></i>
+                            <a href="?{% toggle_sort request 'email' %}" class="sort-link">
+                                <span>Correo Electronico</span>
+                                <i class="bi bi-chevron-{% if current_sort == 'email' %}up{% elif current_sort == '-aemail' %}down{% else %}expand{% endif %} sort-icon"></i>
+                            </a>   
                         </th>
                         <th data-column="phone" class="sortable">
-                            <span>Phone</span>
-                            <i class="bi bi-chevron-expand sort-icon"></i>
+                            <a href="?{% toggle_sort request 'celular' %}" class="sort-link">
+                                <span>Telefono</span>
+                                <i class="bi bi-chevron-{% if current_sort == 'celular' %}up{% elif current_sort == '-celular' %}down{% else %}expand{% endif %} sort-icon"></i>
+                            </a>    
                         </th>
                         <th data-column="nationality" class="sortable">
-                            <span>Nationality</span>
-                            <i class="bi bi-chevron-expand sort-icon"></i>
+                            <a href="?{% toggle_sort request 'nacionalidad' %}" class="sort-link">
+                                <span>Nacionalidad</span>
+                                <i class="bi bi-chevron-{% if current_sort == 'nacionalidad' %}up{% elif current_sort == '-nacionalidad' %}down{% else %}expand{% endif %} sort-icon"></i>
+                            </a>   
                         </th>
                         <th data-column="loyalty" class="sortable">
-                            <span>Loyalty</span>
-                            <i class="bi bi-chevron-expand sort-icon"></i>
+                            <a href="?{% toggle_sort request 'nivel_lealtad' %}" class="sort-link">
+                                <span>Lealtad</span>
+                                <i class="bi bi-chevron-{% if current_sort == 'nivel_lealtad' %}up{% elif current_sort == '-nivel_lealtad' %}down{% else %}expand{% endif %} sort-icon"></i>
+                            </a>   
                         </th>                                                
                         <th class="actions-column"></th>   
                     </tr>
@@ -184,12 +164,9 @@
                                 <span class="phone-number">{{ cliente.celular }}</span>
                             </a>
                         </td>
-                        </td>
                         <td data-column="nationality">
                             <span class="nationality">
-                                {% comment %} <img src="{% static 'flags/' %}{{ cliente.nacionalidad }}.gif" alt="{{ cliente.nacionalidad }}" class="country-flag"> {% endcomment %}
                                 {{ cliente.nacionalidad }}</span>
-                        </td>
                         </td>
                         <td data-column="loyalty">
                             <span class="loyalty-lv">{{ cliente.nivel_lealtad }}</span>
@@ -205,21 +182,51 @@
                             </div>
                         </td>
                     </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center py-4">
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="bi bi-search"></i>
+                                </div>
+                                <h4>No clients found</h4>
+                                <p>Try adjusting your search or filter criteria</p>
+                                <button class="clear-filters-btn" onclick="window.location.href='{% url 'c_list' %}'">Clear Filters</button>
+                            </div>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-
-    <!-- Empty State -->
-    <div class="empty-state" id="emptyState" style="display: none;">
-        <div class="empty-icon">
-            <i class="bi bi-search"></i>
+    <br>
+    <div class="pagination-container">
+        <div class="pagination-controls">
+            <!-- Previous Button -->
+            <a href="?{% if clientes.has_previous %}{% url_replace request 'page' clientes.previous_page_number %}{% else %}#{% endif %}" 
+            class="pagination-btn {% if not clientes.has_previous %}disabled{% endif %}" 
+            id="prevBtn">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+            
+            <div class="pagination-info">
+                <span id="pageInfo">Page {{ clientes.number }} of {{ clientes.paginator.num_pages }}</span>
+            </div>
+            
+            <!-- Next Button -->
+            <a href="?{% if clientes.has_next %}{% url_replace request 'page' clientes.next_page_number %}{% else %}#{% endif %}" 
+            class="pagination-btn {% if not clientes.has_next %}disabled{% endif %}" 
+            id="nextBtn">
+                <i class="bi bi-chevron-right"></i>
+            </a>
         </div>
-        <h4>No clients found</h4>
-        <p>Try adjusting your search or filter criteria</p>
-        <button class="clear-filters-btn" onclick="clearAllFilters()">Clear Filters</button>
-    </div>
+        <div class="pagination-summary">
+            <span id="paginationSummary">Showing {{ clientes.start_index }}-{{ clientes.end_index }} of {{ total_count }} clients</span>
+        </div>
+    </div>    
+    
+
 </div>
 
 <script src="{% static 'js/c_list.js' %}"></script>

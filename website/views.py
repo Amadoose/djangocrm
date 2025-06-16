@@ -12,6 +12,9 @@ from django.db import IntegrityError, transaction, models
 from django.core.exceptions import ValidationError
 from decimal import Decimal, InvalidOperation
 from .models import Cliente, Hotel, Airline, Activity, Operator, Transport
+from django.core.paginator import Paginator
+from django.db.models import Q
+
 
 # This file defines the views for the 'website' app in the DCRM project.
 
@@ -71,10 +74,57 @@ def register_user(request):
 # # # #  #######
 
 ##customer index
-def c_list(request):        
-    # Query all Cliente objects from the DB
-    clientes = Cliente.objects.all()
-    return render(request, 'clients/list.html', {'clientes': clientes})
+def c_list(request):
+    search_term = request.GET.get('search', '')
+    filter_type = request.GET.get('filter', 'all')
+    sort_column = request.GET.get('sort', '-id')
+    
+    # Validate sort column
+    valid_columns = {
+        'id', '-id', 
+        'nombre', '-nombre',
+        'apellido_paterno', '-apellido_paterno',
+        'apellido_materno', '-apellido_materno',
+        'email', '-email',
+        'celular', '-celular',
+        'nacionalidad', '-nacionalidad',
+        'nivel_lealtad', '-nivel_lealtad'
+    }
+    
+    if sort_column not in valid_columns:
+        sort_column = '-id'
+    
+    client_list = Cliente.objects.all()
+    
+    if search_term:
+        client_list = client_list.filter(
+            Q(nombre__icontains=search_term) |
+            Q(apellido_paterno__icontains=search_term) |
+            Q(apellido_materno__icontains=search_term) |
+            Q(email__icontains=search_term) |
+            Q(celular__icontains=search_term)
+        )
+    
+    if filter_type == 'recent':
+        client_list = client_list.order_by('-id')[:100]
+    else:
+        if sort_column.lstrip('-') == 'id':
+            client_list = client_list.order_by('id')
+        else:
+            client_list = client_list.order_by(sort_column)
+    
+    paginator = Paginator(client_list, 50)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'clients/list.html', {
+        'clientes': page_obj,
+        'current_sort': sort_column,
+        'current_search': search_term,
+        'current_filter': filter_type,
+        'total_count': client_list.count(),
+        'request': request  # Make request available for url_replace
+    })
 
 def new_client(request):
     # Handle form submission
