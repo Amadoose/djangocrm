@@ -1,7 +1,9 @@
 from django.db import models
+from django.forms import ValidationError
 from django_countries.fields import CountryField
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator, MinValueValidator
+
 
 # Create your models here.    
 class Cliente(models.Model):
@@ -36,7 +38,19 @@ class Cliente(models.Model):
     
 
 class Hotel(models.Model):
-    
+
+    AMENITY_CHOICES = [
+        ('minibar', 'Minibar'),
+        ('pool', 'Alberca'),
+        ('gym', 'Gym'),
+        ('spa', 'Spa'),
+        ('restaurant', 'Restaurante'),
+        ('bar', 'Bar'),
+        ('beach', 'Playa'),
+        ('breakfast', 'Desayuno incluido'),
+        ('pets', 'Mascotas'),
+    ]    
+        
     STAR_RATING_CHOICES = [
         (1, '★☆☆☆☆ (Poor)'),
         (2, '★★☆☆☆ (Fair)'),
@@ -50,7 +64,6 @@ class Hotel(models.Model):
     contact_email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20, blank=True)  # Allow blank if optional
     rating = models.PositiveSmallIntegerField(choices=STAR_RATING_CHOICES, null=True, blank=True, verbose_name="Star Rating")
-    amenities = models.CharField(max_length=100)
     website = models.URLField()
     # Add validation to price
     price_per_night = models.DecimalField(
@@ -69,6 +82,12 @@ class Hotel(models.Model):
         verbose_name="Active status",
         help_text="Designates whether this hotel should be treated as active."
     )
+
+    amenities = models.CharField(
+        max_length=200,  # Increased to accommodate multiple selections
+        blank=True,
+        help_text="Select multiple amenities"
+    )  
 
     def __str__(self):
         return self.name
@@ -119,8 +138,7 @@ class Activity(models.Model):
     type = models.CharField(max_length=100, choices=ACTIVITY_TYPE_CHOICES, verbose_name="Tipo de actividad")
     location = models.CharField(max_length=200)
     duration = models.CharField(max_length=50, null=True, blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    capacity = models.IntegerField(null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)    
     supplier = models.TextField(blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='activities_created')
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='activities_modified')
@@ -146,8 +164,7 @@ class Operator(models.Model):
     location = models.CharField(max_length=200)    
     contact_email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20)
-    website = models.URLField()
-    specialization = models.CharField(max_length=200, blank=True)
+    website = models.URLField()    
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='operators_created')
     modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='operators_modified')
     created_at = models.DateTimeField(auto_now_add=True)

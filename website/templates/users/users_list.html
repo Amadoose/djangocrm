@@ -9,7 +9,7 @@
 
 <div class="container-fluid px-4 py-3"> {% comment %} main div {% endcomment %}
     <!-- Header Section -->
-    <h2 class="page-title">Clients</h2>
+    <h2 class="page-title">Users</h2>
     <div class="list-header">        
         <div class="header-left">            
             <p class="client-count"> Manage users</p>
@@ -61,7 +61,7 @@
                 </thead> <!-- COLUMNAS -->
                 <tbody id="tableBody">
                     {% for user in users %}                
-                    <tr class="table-row" data-user-id="{{ user.pk }}" onclick="window.location.href='{% url 'user_detail' user.pk %}'">
+                    <tr class="table-row" data-user-id="{{ user.pk }}" {% comment %} onclick="window.location.href='{% url 'user_detail' user.pk %}'" {% endcomment %}>
                         <td data-column="username">{{ user.username }}</td>
                         <td data-column="first_name">{{ user.first_name }}</td>
                         <td data-column="last_name">{{ user.last_name }}</td>

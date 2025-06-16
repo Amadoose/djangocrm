@@ -31,12 +31,8 @@ urlpatterns = [
     path('suppliers/api/<str:service_type>/update/', auth_required(views.update_service_data), name='update_service_data'),
     path('suppliers/api/<str:service_type>/delete/<int:record_id>/', auth_required(views.delete_service_record), name='delete_service_record'),
     path('suppliers/api/<str:service_type>/choices/', auth_required(views.get_field_choices), name='get_field_choices'),
-    # path('hotels/', auth_required(views.hotels_view), name='hotels'),
-    # path('airlines/', auth_required(views.airlines_view), name='airlines'),
-    # path('activities/', auth_required(views.activities_view), name='activities'),
-    # path('operators/', auth_required(views.operators_view), name='operators'),
-    # path('other_transport/', auth_required(views.transport_view), name='other_transport'),
-    
+    path('suppliers/<str:section>/', auth_required(views.suppliers_section), name='suppliers_section'),    
+
     ### HOTEL
     ### AEROLINEAS
     ### ACTIVIDADES

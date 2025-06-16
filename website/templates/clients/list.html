@@ -170,7 +170,7 @@
                         </td>
                         <td data-column="nationality">
                             <span class="nationality">
-                                <img src="{% static 'flags/' %}{{ cliente.nacionalidad }}.gif" alt="{{ cliente.nacionalidad }}" class="country-flag">
+                                {% comment %} <img src="{% static 'flags/' %}{{ cliente.nacionalidad }}.gif" alt="{{ cliente.nacionalidad }}" class="country-flag"> {% endcomment %}
                                 {{ cliente.nacionalidad }}</span>
                         </td>
                         </td>

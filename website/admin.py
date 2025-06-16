@@ -33,7 +33,7 @@ class AirlineAdmin(admin.ModelAdmin):
 
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type', 'location', 'duration', 'price', 'capacity', 'created_at')
+    list_display = ('name', 'type', 'location', 'duration', 'price', 'created_at')
     list_filter = ('type', 'location', 'created_at')
     search_fields = ('name', 'location', 'supplier')
     readonly_fields = ('created_at', 'updated_at', 'created_by', 'modified_by')
@@ -46,9 +46,9 @@ class ActivityAdmin(admin.ModelAdmin):
 
 @admin.register(Operator)
 class OperatorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type', 'location', 'specialization', 'is_active', 'created_at')
+    list_display = ('name', 'type', 'location', 'is_active', 'created_at')
     list_filter = ('type', 'location', 'is_active', 'created_at')
-    search_fields = ('name', 'location', 'contact_email', 'specialization')
+    search_fields = ('name', 'location', 'contact_email')
     readonly_fields = ('created_at', 'updated_at', 'created_by', 'modified_by')
     
     def save_model(self, request, obj, form, change):

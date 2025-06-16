@@ -24,12 +24,11 @@ const serviceFields = {
         'id', 'name', 'code', 'country', 'phone', 'website', 'is_active'
     ],
     activities: [
-        'id', 'name', 'type', 'location', 'duration', 'price',
-        'capacity', 'supplier'
+        'id', 'name', 'type', 'location', 'duration', 'price', 'supplier'
     ],
     operators: [
         'id', 'name', 'type', 'location', 'contact_email', 'phone',
-        'website', 'specialization', 'is_active'
+        'website', 'is_active'
     ],
     transports: [
         'id', 'name', 'type', 'location', 'contact_email', 'phone',
@@ -38,7 +37,23 @@ const serviceFields = {
 };
 // Field configurations for proper input types and validation
 const fieldConfigs = {
-    hotels: {
+    hotels: {      
+        amenities: {
+            type: 'checkbox-group',
+            choices: [
+                ['', '-- Select Amenities --'],
+                ['minibar', 'Minibar'],
+                ['pool', 'Alberca'],
+                ['gym', 'Gym'],
+                ['spa', 'Spa'],
+                ['restaurant', 'Restaurante'],
+                ['bar', 'Bar'],
+                ['beach', 'Playa'],
+                ['breakfast', 'Desayuno incluido'],
+                ['pets', 'Mascotas']
+            ],
+            multiple: true  // Add this for multiple selection
+        },        
         rating: {
             type: 'select',
             choices: [
@@ -76,7 +91,6 @@ const fieldConfigs = {
             ]
         },
         price: { type: 'number', step: '0.01', min: '0' },
-        capacity: { type: 'number', min: '1' },
         supplier: { type: 'textarea' }
     },
     operators: {
@@ -117,31 +131,33 @@ const fieldConfigs = {
         price_per_unit: { type: 'number', step: '0.01', min: '0' }
     }
 };
-function toggleServiceTable(button, serviceType) {
-    // Remove active class from all buttons
+function toggleServiceTable(serviceType) {
+    // Validate serviceType first
+    const validServices = ['hotels', 'airlines', 'activities', 'operators', 'transports'];
+    if (!validServices.includes(serviceType)) return;
+    
+    // Update button states
     document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
+        btn.classList.toggle('active', btn.dataset.service === serviceType);
     });
-   
-    // Hide all service tables
-    document.querySelectorAll('.service-table').forEach(table => {
-        table.classList.remove('active');
-    });
-   
-    // If clicking the same button, just close the table
-    if (currentService === serviceType) {
-        currentService = null;
-        return;
+    
+    // Update table visibility
+    const table = document.getElementById(`${serviceType}-table`);
+    if (table) {
+        document.querySelectorAll('.service-table').forEach(t => {
+            t.classList.remove('active');
+        });
+        table.classList.add('active');
     }
-   
-    // Activate the clicked button and show corresponding table
-    button.classList.add('active');
-    document.getElementById(serviceType + '-table').classList.add('active');
+    
+    // Load data if needed
+    if (!serviceData[serviceType]) {
+        loadServiceData(serviceType);
+    }
+    
     currentService = serviceType;
-   
-    // Load data for this service type
-    loadServiceData(serviceType);
 }
+
 async function loadServiceData(serviceType) {
     try {
         // Load field choices first if needed
@@ -205,6 +221,7 @@ function renderTable(serviceType, data) {
             }
            
             tr.appendChild(td);
+            
         });
        
         tbody.appendChild(tr);
@@ -212,15 +229,93 @@ function renderTable(serviceType, data) {
 }
 function createFieldElement(serviceType, field, value) {
     const config = fieldConfigs[serviceType]?.[field] || {};
-   
-    if (config.type === 'select') {
+    
+    // Special handling for amenities field
+    if (field === 'amenities') {
+        // Create dropdown container
+        const dropdown = document.createElement('div');
+        dropdown.className = 'amenities-dropdown editable-cell';
+        dropdown.dataset.field = field;
+        
+        // Create trigger button
+        const trigger = document.createElement('button');
+        trigger.className = 'amenities-trigger';
+        
+        // Create dropdown content
+        const dropdownContent = document.createElement('div');
+        dropdownContent.className = 'amenities-dropdown-content';
+        
+        // Get current values
+        const currentValues = value ? value.split(',') : [];
+        
+        // Create selected text display
+        const selectedText = document.createElement('span');
+        selectedText.className = 'selected-amenities';
+        updateSelectedText(selectedText, currentValues, config.choices);
+        
+        // Create dropdown options
+        config.choices.forEach(([choiceValue, choiceLabel]) => {
+            if (choiceValue === '') return; // Skip empty option
+            
+            const option = document.createElement('div');
+            option.className = 'amenity-option';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'amenity-checkbox';
+            checkbox.value = choiceValue;
+            checkbox.checked = currentValues.includes(choiceValue);
+            
+            const label = document.createElement('label');
+            label.textContent = choiceLabel;
+            
+            option.appendChild(checkbox);
+            option.appendChild(label);
+            dropdownContent.appendChild(option);
+        });
+        
+        // Toggle dropdown on click
+        trigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdownContent.classList.toggle('show');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!dropdown.contains(e.target)) {
+                dropdownContent.classList.remove('show');
+            }
+        });
+        
+        // Update selected amenities when checkboxes change
+        dropdownContent.addEventListener('change', function() {
+            const checkboxes = dropdownContent.querySelectorAll('.amenity-checkbox:checked');
+            const selectedValues = Array.from(checkboxes).map(cb => cb.value);
+            updateSelectedText(selectedText, selectedValues, config.choices);
+            
+            // Mark row as changed but don't trigger validation
+            markRowAsChanged(dropdown.closest('tr'));
+            
+            // Manually update the data object
+            const row = dropdown.closest('tr');
+            const rowData = extractRowData(row, serviceType);
+            serviceData[serviceType][row.dataset.rowIndex] = rowData;
+        });
+        
+        trigger.appendChild(selectedText);
+        dropdown.appendChild(trigger);
+        dropdown.appendChild(dropdownContent);
+        
+        return dropdown;
+    }
+    // Rest of your field type handling
+    else if (config.type === 'select') {
         const select = document.createElement('select');
         select.className = 'editable-cell';
         select.dataset.field = field;
-       
-        // Use predefined choices or dynamic choices
+        
         const choices = config.choices || (fieldChoices[serviceType]?.[field] || []);
-       
+        
         choices.forEach(([choiceValue, choiceLabel]) => {
             const option = document.createElement('option');
             option.value = choiceValue;
@@ -230,38 +325,57 @@ function createFieldElement(serviceType, field, value) {
             }
             select.appendChild(option);
         });
-       
+        
         return select;
-    } else if (config.type === 'checkbox') {
+    }
+    else if (config.type === 'checkbox') {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.className = 'editable-cell';
         checkbox.dataset.field = field;
         checkbox.checked = value === true || value === 'true' || value === 1;
         return checkbox;
-    } else if (config.type === 'textarea') {
+    }
+    else if (config.type === 'textarea') {
         const textarea = document.createElement('textarea');
         textarea.className = 'editable-cell';
         textarea.dataset.field = field;
         textarea.value = value || '';
         textarea.rows = 2;
         return textarea;
-    } else {
+    }
+    else {
         const input = document.createElement('input');
         input.type = config.type || getDefaultInputType(field);
         input.className = 'editable-cell';
         input.dataset.field = field;
         input.value = value || '';
-       
-        // Add additional attributes
+        
         if (config.step) input.step = config.step;
         if (config.min) input.min = config.min;
         if (config.pattern) input.pattern = config.pattern;
         if (config.title) input.title = config.title;
-       
+        
         return input;
     }
 }
+
+// Helper function to update the selected amenities text
+function updateSelectedText(element, selectedValues, choices) {
+    if (selectedValues.length === 0) {
+        element.textContent = 'Select amenities...';
+        return;
+    }
+    
+    const selectedLabels = selectedValues.map(value => {
+        const choice = choices.find(c => c[0] === value);
+        return choice ? choice[1] : value;
+    });
+    
+    element.textContent = selectedLabels.join(', ');
+}
+
+
 function getDefaultInputType(field) {
     if (field.includes('email')) return 'email';
     if (field.includes('phone')) return 'tel';
@@ -270,6 +384,7 @@ function getDefaultInputType(field) {
     return 'text';
 }
 function markRowAsChanged(row) {
+    // Only change background color, don't trigger validation
     row.style.backgroundColor = '#fff3cd';
     const rowKey = `${currentService}-${row.dataset.rowIndex}`;
     changedRows.add(rowKey);
@@ -303,6 +418,7 @@ function addNewRow(serviceType) {
     const newRow = tbody.children[newIndex];
     markRowAsChanged(newRow);
 }
+
 async function saveAllChanges(serviceType) {
     const tbody = document.getElementById(serviceType + '-tbody');
     const rows = tbody.querySelectorAll('tr');
@@ -349,6 +465,16 @@ function validateRowData(serviceType, data) {
     };
    
     const required = requiredFields[serviceType] || [];
+
+    for (const field of required) {
+        // Skip validation if we're just selecting amenities
+        if (field === 'amenities' && data[field] === undefined) continue;
+        
+        if (!data[field] || data[field].toString().trim() === '') {
+            alert(`El campo "${field.replace('_', ' ')}" es requerido`);
+            return false;
+        }
+    }    
    
     for (const field of required) {
         if (!data[field] || data[field].toString().trim() === '') {
@@ -392,29 +518,39 @@ function isValidUrl(url) {
 function extractRowData(row, serviceType) {
     const data = {};
     const elements = row.querySelectorAll('.editable-cell');
-   
+    
     // Add ID if it exists
     if (row.dataset.recordId && row.dataset.recordId !== '') {
         data.id = row.dataset.recordId;
     }
-   
+    
     elements.forEach(element => {
         const field = element.dataset.field;
         let value;
-       
-        if (element.type === 'checkbox') {
+        
+        if (element.classList.contains('amenities-dropdown')) {
+            // Handle amenities dropdown
+            const checkboxes = element.querySelectorAll('.amenity-checkbox:checked');
+            value = Array.from(checkboxes).map(cb => cb.value).join(',');
+        } 
+        else if (element.type === 'checkbox') {
             value = element.checked;
-        } else if (element.type === 'number') {
+        } 
+        else if (element.type === 'number') {
             const numValue = element.value.trim();
             value = numValue === '' ? null : parseFloat(numValue);
-        } else {
+        } 
+        else if (element.tagName === 'SELECT') {
+            value = element.value;
+        }
+        else {
             value = element.value.trim();
             value = value === '' ? null : value;
         }
-       
+        
         data[field] = value;
     });
-   
+    
     return data;
 }
 async function saveRecord(serviceType, data) {
@@ -502,3 +638,30 @@ function toggleButton(button) {
     console.log('Legacy toggleButton called, use toggleServiceTable instead');
 }
 
+function toggleServiceTable(serviceType) {
+    // Update button states
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.service === serviceType);
+    });
+    
+    // Update table visibility
+    document.querySelectorAll('.service-table').forEach(table => {
+        table.classList.toggle('active', table.id === `${serviceType}-table`);
+    });
+    
+    // Load data if needed
+    if (!serviceData[serviceType]) {
+        loadServiceData(serviceType);
+    }
+    
+    currentService = serviceType;
+}
+
+window.addEventListener('scroll', function() {
+    const scrollBtn = document.querySelector('.scroll-top-btn');
+    if (window.scrollY > 300) {
+        scrollBtn.classList.add('visible');
+    } else {
+        scrollBtn.classList.remove('visible');
+    }
+});

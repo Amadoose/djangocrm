@@ -10,31 +10,38 @@
 <div class="container-fluid px-4 py-3">
     <!-- Header Section -->
     <h2 class="page-title">Suppliers</h2>
-    <div class="list-header">        
+    <div class="list-header">           
         <div class="header-left">                    
-            <button class="filter-btn" data-service="hotels" onclick="toggleServiceTable(this, 'hotels')">
+            <button class="filter-btn {% if active_section == 'hotels' %}active{% endif %}" 
+                    data-service="hotels">
                 <span class="page-subtitle">Hoteles</span>
-            </button>    
-            <button class="filter-btn" data-service="airlines" onclick="toggleServiceTable(this, 'airlines')">
+            </button>         
+            <button class="filter-btn {% if active_section == 'airlines' %}active{% endif %}" 
+                    data-service="airlines">
                 <span class="page-subtitle">Aerolineas</span>
-            </button>    
-            <button class="filter-btn" data-service="activities" onclick="toggleServiceTable(this, 'activities')">
+            </button>  
+            <button class="filter-btn {% if active_section == 'activities' %}active{% endif %}" 
+                    data-service="activities">
                 <span class="page-subtitle">Actividades</span>
-            </button>    
-            <button class="filter-btn" data-service="operators" onclick="toggleServiceTable(this, 'operators')">
+            </button>  
+            <button class="filter-btn {% if active_section == 'operators' %}active{% endif %}" 
+                    data-service="operators">
                 <span class="page-subtitle">Operadores</span>
-            </button>    
-            <button class="filter-btn" data-service="transports" onclick="toggleServiceTable(this, 'transports')">
+            </button>  
+            <button class="filter-btn {% if active_section == 'transports' %}active{% endif %}" 
+                    data-service="transports">
                 <span class="page-subtitle">Otro Transporte</span>
-            </button>                                                    
+            </button>                                                                                     
         </div>
     </div>   
-
+        <button class="scroll-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <i class="bi bi-arrow-up"></i>
+        </button>         
     <!-- Service Tables -->
     <div id="hotels-table" class="service-table">
         <div class="table-header">          
             <div>
-                <button class="btn-add-row" onclick="addNewRow('hotels')"><i class="bi bi-plus-circle"></i></button>
+                <button class="btn-add-row" onclick="addNewRow('hotels')"><i class="bi bi-plus-square"></i></button>
                 <button class="btn-save" onclick="saveAllChanges('hotels')"><i class="bi bi-check-square"></i></button>
             </div>
         </div>
@@ -109,8 +116,7 @@
                             <th>Tipo</th>
                             <th>Ubicación</th>
                             <th>Duración</th>
-                            <th class="table-number">Precio</th>
-                            <th class="table-number">Capacidad</th>
+                            <th class="table-number">Precio</th>                            
                             <th>Proveedor</th>                           
                         </tr>
                     </thead>
@@ -140,8 +146,7 @@
                             <th>Ubicación</th>
                             <th class="email-cell">Email de Contacto</th>
                             <th class="phone-cell">Teléfono</th>
-                            <th class="url-cell">Website</th>
-                            <th>Especialización</th>
+                            <th class="url-cell">Website</th>                            
                             <th class="status-cell">Activo</th>                            
                         </tr>
                     </thead>
@@ -188,5 +193,43 @@
 </div><!-- END DIV -->
 
 <script src="{% static 'js/suppliers/suppliers.js' %}"></script>
+<script>
+// Initialize based on URL
+document.addEventListener('DOMContentLoaded', function() {
+    // Parse current URL to determine active section
+    const pathSegments = window.location.pathname.split('/');
+    let activeSection = pathSegments[pathSegments.length - 2] || 
+                       new URLSearchParams(window.location.search).get('section');
+    
+    // Only proceed if we have a valid active section
+    if (activeSection) {
+        const activeButton = document.querySelector(`.filter-btn[data-service="${activeSection}"]`);
+        if (activeButton) {
+            activeButton.classList.add('active');
+            toggleServiceTable(activeSection);
+        }
+    }
+
+    // Add click handlers
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const service = this.dataset.service;
+            // Update URL without page reload
+            history.pushState({}, '', `/suppliers/${service}/`);
+            toggleServiceTable(service);
+        });
+    });
+
+    // Handle browser navigation
+    window.addEventListener('popstate', function() {
+        const path = window.location.pathname.split('/');
+        const service = path[path.length - 2];
+        if (service) {
+            toggleServiceTable(service);
+        }
+    });
+});
+</script>
+
 {% endblock %}
 

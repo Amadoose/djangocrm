@@ -142,6 +142,31 @@ def suppliers(request):
     }
     return render(request, 'suppliers/suppliers.html', context)
 
+def suppliers_section(request, section):
+    """View for specific supplier sections"""
+    return render_suppliers_view(request, section)
+
+def render_suppliers_view(request, active_section=None):
+    """Shared view logic"""
+    valid_sections = {
+        'hotels': Hotel.objects.all(),
+        'airlines': Airline.objects.all(),
+        'activities': Activity.objects.all(),
+        'operators': Operator.objects.all(),
+        'transports': Transport.objects.all()
+    }
+    
+    context = {
+        'active_section': active_section,
+        **valid_sections
+    }
+    
+    if active_section and active_section not in valid_sections:
+        return redirect('suppliers')
+        
+    return render(request, 'suppliers/suppliers.html', context)
+
+
 @csrf_exempt
 @require_http_methods(["GET"])
 def get_service_data(request, service_type):
@@ -377,7 +402,7 @@ def get_field_choices(request, service_type):
         
         return JsonResponse({'choices': choices})
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        return JsonResponse({'error': str(e)}, status=500)    
 
 # # # # # # # #
 # OTHERS
