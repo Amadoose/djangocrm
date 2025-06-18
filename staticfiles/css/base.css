@@ -323,28 +323,25 @@ html {
     color: var(--color-text-dark);
 }
 
-/* Enhanced Quote Button Styles */
+/* Base state - static styles */
 .nav-link[href*="quote"] {
     position: relative;
-    background: linear-gradient(135deg, 
-        rgba(0, 122, 255, 0.15) 0%, 
-        rgba(120, 119, 198, 0.15) 50%, 
-        rgba(255, 255, 255, 0.1) 100%);
+    background: black;
     border: 2px solid transparent;
     background-clip: padding-box;
     backdrop-filter: blur(15px);
-    transform: translateZ(0) translateY(-2px);
-    box-shadow: 
-        0 8px 25px rgba(0, 122, 255, 0.2),
-        0 4px 12px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transform: translateZ(0);
+    box-shadow: black;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     overflow: hidden;
     font-weight: 600;
     letter-spacing: 0.3px;
+    z-index: 10;
+    margin: 4px 8px 8px 8px;
+    border-radius: 5px;
 }
 
-/* Animated border gradient */
+/* Static border in base state */
 .nav-link[href*="quote"]::before {
     content: '';
     position: absolute;
@@ -355,24 +352,14 @@ html {
     background: linear-gradient(45deg, 
         #007AFF, 
         #5856D6, 
-        #AF52DE, 
-        #ffbfdeb2, 
-        #0099ff);
-    background-size: 300% 300%;
+        #AF52DE);
     border-radius: var(--border-radius-md);
     z-index: -1;
-    animation: gradientShift 3s ease infinite;
-    opacity: 0.8;
+    opacity: 0.5;
+    transition: all 0.4s ease;
 }
 
-/* Gradient animation */
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* Enhanced hover state */
+/* Hover state - with all animations */
 .nav-link[href*="quote"]:hover {
     background: linear-gradient(135deg, 
         rgba(0, 122, 255, 0.25) 0%, 
@@ -386,27 +373,42 @@ html {
     color: rgba(255, 255, 255, 0.95) !important;
 }
 
+/* Animated border gradient ONLY on hover */
 .nav-link[href*="quote"]:hover::before {
-    animation-duration: 1.5s;
-    opacity: 1;
+    background: linear-gradient(45deg, 
+        #007AFF, 
+        #5856D6, 
+        #AF52DE, 
+        #ffbfdeb2, 
+        #0099ff);
+    background-size: 300% 300%;
+    animation: gradientShift 3s ease infinite;
+    opacity: 0.8;
 }
 
-/* Enhanced active/focus state */
+/* Gradient animation (only applied on hover) */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Active/focus state - static styles */
 .nav-link[href*="quote"]:active,
 .nav-link[href*="quote"]:focus {
-    transform: translateZ(0) translateY(-1px) scale(0.98);
+    transform: translateZ(0) translateY(0) scale(0.98);
     box-shadow: 
-        0 6px 20px rgba(0, 122, 255, 0.4),
-        0 3px 10px rgba(0, 0, 0, 0.2),
+        0 4px 15px rgba(0, 122, 255, 0.25),
+        0 2px 8px rgba(0, 0, 0, 0.15),
         inset 0 2px 4px rgba(0, 0, 0, 0.1);
     background: linear-gradient(135deg, 
-        rgba(0, 122, 255, 0.3) 0%, 
-        rgba(120, 119, 198, 0.3) 50%, 
+        rgba(0, 122, 255, 0.2) 0%, 
+        rgba(120, 119, 198, 0.2) 50%, 
         rgba(255, 255, 255, 0.15) 100%);
     outline: none;
 }
 
-/* Icon enhancement for quote button */
+/* Icon styles */
 .nav-link[href*="quote"] i {
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     transition: all 0.3s ease;
@@ -415,34 +417,4 @@ html {
 .nav-link[href*="quote"]:hover i {
     transform: scale(1.1) rotate(2deg);
     filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
-}
-
-/* Subtle pulse animation when not hovered */
-.nav-link[href*="quote"] {
-    animation: subtlePulse 4s ease-in-out infinite;
-}
-
-.nav-link[href*="quote"]:hover {
-    animation: none;
-}
-
-@keyframes subtlePulse {
-    0%, 100% { 
-        box-shadow: 
-            0 8px 25px rgba(0, 122, 255, 0.2),
-            0 4px 12px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    }
-    50% { 
-        box-shadow: 
-            0 10px 30px rgba(0, 122, 255, 0.25),
-            0 5px 15px rgba(0, 0, 0, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.35);
-    }
-}
-
-/* Ensure the quote button always stays elevated above other nav items */
-.nav-link[href*="quote"] {
-    z-index: 10;
-    margin: 4px 8px 8px 8px;
 }
