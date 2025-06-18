@@ -11,19 +11,13 @@ from django.views.decorators.http import require_http_methods
 from django.db import IntegrityError, transaction, models
 from django.core.exceptions import ValidationError
 from decimal import Decimal, InvalidOperation
-from .models import Cliente, Hotel, Airline, Activity, Operator, Transport
+from .models import Cliente, Hotel, Airline, Activity, Operator, Transport, Folio
 from django.core.paginator import Paginator
 from django.db.models import Q
 
-
 # This file defines the views for the 'website' app in the DCRM project.
 
-# Create your views here.
-
 # User authentication views
-# User authentication views
-# User authentication views
-
 def login_user(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -62,12 +56,128 @@ def register_user(request):
         form = SignUpForm()            
         return render(request, 'register.html', {'form': form})
     
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'register.html', {'form': form})    
 
-#REGISTRY CREATION VIEWS
-#REGISTRY CREATION VIEWS
-#REGISTRY CREATION VIEWS 
+# QUOTE_FOLIO
+# QUOTE_FOLIO
+# QUOTE_FOLIO
+def search_clientes(request):
+    """AJAX view for searching clients"""
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        q = request.GET.get('q', '')
+        page = int(request.GET.get('page', 1))
+        page_size = 20
+        
+        if len(q) >= 2:
+            clientes = Cliente.objects.filter(
+                Q(nombre__icontains=q) | 
+                Q(apellido_paterno__icontains=q) |
+                Q(apellido_materno__icontains=q) |
+                Q(email__icontains=q)
+            ).values('id', 'nombre', 'apellido_paterno', 'apellido_materno')
+            
+            start = (page - 1) * page_size
+            end = start + page_size
+            
+            results = []
+            for cliente in clientes[start:end]:
+                results.append({
+                    'id': cliente['id'],
+                    'text': f"{cliente['nombre']} {cliente['apellido_paterno']} {cliente['apellido_materno'] or ''}".strip(),
+                    'nombre': cliente['nombre'],
+                    'apellido_paterno': cliente['apellido_paterno']
+                })
+            
+            return JsonResponse({
+                'results': results,
+                'pagination': {'more': len(clientes) > end}
+            })
     
+    return JsonResponse({'results': [], 'pagination': {'more': False}})
+
+def search_usuarios(request):
+    """AJAX view for searching users/agents"""
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        q = request.GET.get('q', '')
+        page = int(request.GET.get('page', 1))
+        page_size = 20
+        
+        if len(q) >= 2:
+            usuarios = User.objects.filter(
+                Q(first_name__icontains=q) | 
+                Q(last_name__icontains=q) |
+                Q(username__icontains=q) |
+                Q(email__icontains=q)
+            ).filter(is_active=True).values('id', 'username', 'first_name', 'last_name')
+            
+            start = (page - 1) * page_size
+            end = start + page_size
+            
+            results = []
+            for usuario in usuarios[start:end]:
+                results.append({
+                    'id': usuario['id'],
+                    'text': f"{usuario['first_name']} {usuario['last_name']} ({usuario['username']})".strip(),
+                    'first_name': usuario['first_name'],
+                    'last_name': usuario['last_name'],
+                    'username': usuario['username']
+                })
+            
+            return JsonResponse({
+                'results': results,
+                'pagination': {'more': len(usuarios) > end}
+            })
+    
+    return JsonResponse({'results': [], 'pagination': {'more': False}})
+
+def crear_folio(request):
+    """View to create a new folio"""
+    if request.method == 'POST':
+        try:
+            cliente_id = request.POST.get('cliente')
+            agente_id = request.POST.get('agente')
+            tipo_viaje = request.POST.get('tipo_viaje')
+            
+            # Validate required fields
+            if not all([cliente_id, agente_id, tipo_viaje]):
+                messages.error(request, 'Todos los campos son requeridos.')
+                return redirect('new_quote')  # Replace with your actual URL name
+            
+            # Get the objects
+            cliente = Cliente.objects.get(id=cliente_id)
+            agente = User.objects.get(id=agente_id)
+            
+            # Create the folio
+            folio = Folio.objects.create(
+                cliente=cliente,
+                agente=agente,
+                tipo_viaje=tipo_viaje
+            )
+            
+            messages.success(request, f'Folio #{folio.id} creado exitosamente.')
+            
+            # Redirect to the next template (you'll need to create this)
+            return redirect('folio_detail', folio_id=folio.id)
+            
+        except (Cliente.DoesNotExist, User.DoesNotExist) as e:
+            messages.error(request, 'Cliente o agente no encontrado.')
+            return redirect('new_quote')
+        except Exception as e:
+            messages.error(request, f'Error al crear el folio: {str(e)}')
+            return redirect('new_quote')
+        # Handle GET request - render the modal template
+    else:
+        # Get data needed for the form (clients, agents, etc.)
+        clientes = Cliente.objects.all()
+        agentes = User.objects.filter(is_staff=True)  # or whatever filter you need
+        
+        context = {
+            'clientes': clientes,
+            'agentes': agentes,
+        }
+        
+        return render(request, 'quoting/new_quote.html', context)
+
 
 # # # # # # # #
 # CLIENT VIEWS #
@@ -108,10 +218,11 @@ def c_list(request):
     if filter_type == 'recent':
         client_list = client_list.order_by('-id')[:100]
     else:
-        if sort_column.lstrip('-') == 'id':
-            client_list = client_list.order_by('id')
-        else:
-            client_list = client_list.order_by(sort_column)
+        client_list = client_list.order_by(sort_column)
+        # if sort_column.lstrip('-') == 'id':
+        #     client_list = client_list.order_by('id')
+        # else:
+        #     client_list = client_list.order_by(sort_column)
     
     paginator = Paginator(client_list, 50)
     page_number = request.GET.get('page')

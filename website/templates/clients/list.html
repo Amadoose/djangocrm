@@ -8,19 +8,6 @@
 {% block extra_head %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/client_list.css' %}">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
-<style>
-    .sort-link {
-        text-decoration: none;
-        color: inherit;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-    .sort-link:hover {
-        text-decoration: none;
-        color: var(--primary);
-    }
-</style>
 {% endblock %}
 
 <div class="container-fluid px-4 py-3">
@@ -35,7 +22,7 @@
         <div class="header-right">
             <div class="search-container">
                 <i class="bi bi-search search-icon"></i>
-                <input type="text" class="search-input" id="searchInput" placeholder="Search clients..." value="{{ current_search|default:'' }}">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search clients..." value="{{ current_search|default:'' }}">                
             </div>
             <!-- Add Export Buttons -->
             <div class="export-buttons">
@@ -142,7 +129,7 @@
                 </thead>
                 <tbody id="tableBody">
                     {% for cliente in clientes %}
-                    <tr class="table-row" data-client-id="{{ cliente.pk }}" onclick="window.location.href='{% url 'client_detail' cliente.pk %}'">
+                    <tr class="table-row" data-client-id="{{ cliente.pk }}" onclick="window.location.href='{% url 'client_detail' cliente.pk %}?{{ request.GET.urlencode }}'">
                         <td data-column="id">
                             <span class="id-badge">{{ cliente.id }}</span>
                         </td>
@@ -173,7 +160,7 @@
                         </td>                                                
                         <td class="actions-cell">
                             <div class="action-buttons">
-                                <a href="{% url 'client_detail' cliente.pk %}" class="action-btn view-btn" onclick="event.stopPropagation();" title="View Details">
+                                <a href="{% url 'client_detail' cliente.pk %}?{{ request.GET.urlencode }}" class="action-btn view-btn" onclick="event.stopPropagation();" title="View Details">
                                     <i class="bi bi-eye"></i>
                                 </a>
                                 <a href="{% url 'update_client' cliente.pk %}" class="action-btn edit-btn" onclick="event.stopPropagation();" title="Edit Client">
@@ -191,7 +178,7 @@
                                 </div>
                                 <h4>No clients found</h4>
                                 <p>Try adjusting your search or filter criteria</p>
-                                <button class="clear-filters-btn" onclick="window.location.href='{% url 'c_list' %}'">Clear Filters</button>
+                                <button class="clear-filters-btn" onclick="window.location.href='{% url 'clients' %}'">Clear Filters</button>
                             </div>
                         </td>
                     </tr>

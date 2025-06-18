@@ -104,9 +104,9 @@
 
 <!-- Action Buttons -->
 <div class="action-buttons">
-  <a href="{% url 'clients' %}" class="btn-secondary">
-    <i class="bi bi-arrow-left me-2"></i>Back to List
-  </a>
+  <button onclick="window.history.back()" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Back to List
+  </button>
   <a href="{% url 'update_client' cliente.pk %}" class="btn-primary">
     <i class="bi bi-pencil-square me-2"></i>Edit Client
   </a>

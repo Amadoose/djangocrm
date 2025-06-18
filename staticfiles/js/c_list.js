@@ -118,3 +118,14 @@ function exportToPDF() {
     // Implement PDF export functionality if needed
     console.log("PDF export would be implemented here");
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Prevent row click when clicking on sortable header
+    document.querySelectorAll('th.sortable').forEach(header => {
+        header.addEventListener('click', function(e) {
+            if (e.target.closest('a.sort-link')) {
+                e.stopPropagation();
+            }
+        });
+    });
+});

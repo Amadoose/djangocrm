@@ -209,3 +209,32 @@ class Transport(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.get_type_display()}"
+    
+
+class Folio(models.Model):
+    TIPO_VIAJE_CHOICES = [
+        ('honeymoon', '💕 Luna de Miel'),
+        ('anniversary', '🎉 Aniversario'),
+        ('birthday', '🎂 Cumpleaños'),
+        ('vacation', '🏖️ Vacaciones'),
+        ('business', '💼 Viaje de Negocios'),
+        ('family', '👨‍👩‍👧‍👦 Viaje Familiar'),
+        ('graduation', '🎓 Graduación'),
+        ('wedding', '💒 Boda'),
+        ('other', '✨ Otro'),
+    ]
+
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='folios')
+    agente = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='folios_asignados')
+    tipo_viaje = models.CharField(max_length=50, choices=TIPO_VIAJE_CHOICES, default='vacation', verbose_name="Celebración")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Folio'
+        verbose_name_plural = 'Folios'
+
+    def __str__(self):
+        return f"Folio #{self.id} - {self.cliente.nombre} {self.cliente.apellido_paterno}"
