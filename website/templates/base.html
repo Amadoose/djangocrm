@@ -3,29 +3,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %} {{ page_title }} {% endblock %}</title>
+    <title>{% block title %} Mundana Travel {% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Bootstrap -->    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="https://mundanatravel.com/wp-content/uploads/2024/10/mundana-1-1.svg">    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/quote/new_quote.css' %}">
+    
     {% block extra_head %}{% endblock %}
 </head>
 
 <body>
-    <!-- Mobile Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
-        <!-- Logo Section -->
         <div class="sidebar-logo">
             <a href="{% url 'users' %}" class="d-block w-100 text-center text-decoration-none">
                 <img src="https://mundanatravel.com/wp-content/uploads/2024/06/mundana-travel-logo.png"
@@ -33,86 +30,32 @@
                     style="max-height: 36px; width: auto;">
             </a>
         </div>
-
-        <!-- Navigation Menu -->
         <div class="px-2 flex-grow-1">
-            <!-- Navigation Section -->
             <div class="nav-section">
                 <div class="nav-section-header">Navigation</div>
                 <ul class="nav flex-column">
                     <li>
-                        <a class="nav-link" href="{% url 'new_quote' %}" data-tooltip="New Quote">
+                        <a class="nav-link" href="#" data-tooltip="New Quote" onclick="event.preventDefault(); window.FolioModal.open();">
                             <i class="bi bi-file-earmark-text"></i>
-                            <span>NEW QUOTE</span>
+                            <span>New Quote</span>
                         </a>
                     </li>
-                    
-                    <li>
-                        <a class="nav-link" href="#" data-tooltip="Home">
-                            <i class="bi bi-house"></i>
-                            <span>Home</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a class="nav-link" href="#" data-tooltip="Insights">
-                            <i class="bi bi-graph-up"></i>
-                            <span>Insights</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a class="nav-link" href="#" data-tooltip="Leaderboards">
-                            <i class="bi bi-trophy"></i>
-                            <span>Leaderboards</span>
-                        </a>
-                    </li>
+                    <li><a class="nav-link" href="{% url 'home' %}" data-tooltip="Home"><i class="bi bi-house"></i><span>Home</span></a></li>
+                    <li><a class="nav-link" href="#" data-tooltip="Insights"><i class="bi bi-graph-up"></i><span>Insights</span></a></li>
+                    <li><a class="nav-link" href="#" data-tooltip="Leaderboards"><i class="bi bi-trophy"></i><span>Leaderboards</span></a></li>
                 </ul>
             </div>
-
-            <!-- Administration Section -->
             <div class="nav-section">
                 <div class="nav-section-header">Administration</div>
                 <ul class="nav flex-column">
-                    <li>
-                        <a class="nav-link" href="{% url 'users' %}" data-tooltip="Users">
-                            <i class="bi bi-person-badge"></i>
-                            <span>Users</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a class="nav-link" href="{% url 'clients' %}" data-tooltip="Clients">
-                            <i class="bi bi-people"></i>
-                            <span>Clients</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a class="nav-link" href="{% url 'suppliers_section' section='hotels' %}" data-tooltip="Suppliers">
-                            <i class="bi bi-airplane"></i>
-                            <span>Suppliers</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a class="nav-link" href="{% url 'reports' %}" data-tooltip="Reports">
-                            <i class="bi bi-bar-chart-line"></i>
-                            <span>Reports</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a class="nav-link" href="{% url 'administration' %}" data-tooltip="Admin">
-                            <i class="bi bi-gear"></i>
-                            <span>Admin</span>
-                        </a>
-                    </li>
+                    <li><a class="nav-link" href="{% url 'users' %}" data-tooltip="Users"><i class="bi bi-person-badge"></i><span>Users</span></a></li>
+                    <li><a class="nav-link" href="{% url 'clients' %}" data-tooltip="Clients"><i class="bi bi-people"></i><span>Clients</span></a></li>
+                    <li><a class="nav-link" href="{% url 'suppliers_section' section='hotels' %}" data-tooltip="Suppliers"><i class="bi bi-airplane"></i><span>Suppliers</span></a></li>
+                    <li><a class="nav-link" href="{% url 'reports' %}" data-tooltip="Reports"><i class="bi bi-bar-chart-line"></i><span>Reports</span></a></li>
+                    <li><a class="nav-link" href="{% url 'administration' %}" data-tooltip="Admin"><i class="bi bi-gear"></i><span>Admin</span></a></li>
                 </ul>
             </div>
         </div>
-         
-        <!-- Footer/Logout -->
         <div class="sidebar-footer">     
             <a class="nav-link text-decoration-none logout-link" href="{% url 'logout' %}" data-tooltip="Logout">
                 <i class="bi bi-box-arrow-right"></i>
@@ -121,27 +64,83 @@
         </div>
     </nav>
 
-    <!-- Topbar -->
     <div class="topbar" id="topbar">
-        <!-- Right: user info -->         
         <div class="d-flex align-items-center gap-3 ms-auto">
             <span class="fw-semibold d-none d-sm-inline">{{ request.user.username }}</span>
             <img src="{% static 'img/avatar.png' %}" alt="avatar" class="rounded-circle" style="width: 36px; height: 36px;">
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="main-content" id="mainContent">     
         <div class="content-area">           
             {% block content %} {% endblock %}
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-    <script src="{% static 'js/my_script.js' %}"></script>
+    <div class="modal-overlay" id="folioModalOverlay"></div>
+    <div class="modal-container" id="folioModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="bi bi-file-earmark-plus"></i> Nuevo Folio</h2>
+                <button class="modal-close" id="closeFolioModal"><i class="bi bi-x-lg"></i></button>
+            </div>
+            
+            <form class="modal-form" id="folioForm" method="POST" action="{% url 'crear_folio_api' %}">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label class="form-label required"><i class="bi bi-pencil"></i> Nombre de la Cotización</label>
+                    <input type="text" class="form-control" name="name" placeholder="Ej: Viaje a Cancún - Familia Pérez" required>
+                    <small class="form-help">Ingresa un nombre descriptivo para identificar este folio</small>
+                </div>
 
-</body>
+                <div class="form-group">
+                    <label class="form-label required"><i class="bi bi-person"></i> Cliente</label>
+                    <input type="text" id="clienteSelect" name="cliente" required placeholder="Escribe para buscar cliente..."/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required"><i class="bi bi-calendar-heart"></i> Celebración</label>
+                    <select class="form-control" name="tipo_viaje" required>
+                        <option value="">Seleccionar celebración...</option>
+                        <option value="honeymoon">💕 Luna de Miel</option>
+                        <option value="anniversary">🎉 Aniversario</option>
+                        <option value="birthday">🎂 Cumpleaños</option>
+                        <option value="vacation">🏖️ Vacaciones</option>
+                        <option value="business">💼 Viaje de Negocios</option>
+                        <option value="family">👨‍👩‍👧‍👦 Viaje Familiar</option>
+                        <option value="graduation">🎓 Graduación</option>
+                        <option value="wedding">💒 Boda</option>
+                        <option value="other">✨ Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required"><i class="bi bi-person-badge"></i> Agente</label>
+                    <input type="text" id="agenteSelect" name="agente" required placeholder="Escribe para buscar agente..."/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label"><i class="bi bi-calendar3"></i> Fecha de Creación</label>
+                    <div class="created-at-container">
+                        <span class="created-at" id="createdAtDisplay"></span>
+                        <small class="form-help">Se establecerá al momento de crear</small>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelFolio"><i class="bi bi-x-circle"></i> Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Crear Folio</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+    
+    <script src="{% static 'js/base.js' %}"></script>
+    <script src="{% static 'js/quote/new_quote.js' %}"></script> </body>
 </html>

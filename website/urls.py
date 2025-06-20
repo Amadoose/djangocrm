@@ -5,14 +5,20 @@ from . import views
 
 urlpatterns = [
     # AUTHENTICATE URLS
-    # path('home/', views.home, name='home'),      
+    path('home/', auth_required(views.home), name='home'),      
     path('', auth_required(views.c_list), name='clients'),     
     path('login/', views.login_user, name='login'), 
     path('logout/', views.logout_user, name='logout'),    
     ### QUOTE
-    path('search/clientes/', auth_required(views.search_clientes), name='search_clientes'),
-    path('search/usuarios/', auth_required(views.search_usuarios), name='search_usuarios'),
-    path('new-quote/', auth_required(views.crear_folio), name='new_quote'),
+    path('api/search_clients/', views.search_clients_api, name='search_clients_api'),
+    path('api/search_agents/', views.search_agents_api, name='search_agents_api'),    
+    path('api/create-folio/', views.crear_folio_api, name='crear_folio_api'),
+    path('folio_detail/<int:folio_id>/', views.folio_detail, name='folio_detail'),
+    path('folio_detail/<int:folio_id>/update_comments/', views.update_folio_comments, name='update_folio_comments'),
+    path('folio_detail/<int:folio_id>/update_budget/', views.update_folio_budget_form, name='update_folio_budget_form'),
+    path('folio_detail/<int:folio_id>/toggle_status/', views.update_folio_status, name='update_folio_status'),
+    path('folios/', views.folios_list, name='folios_list'),
+    
     ### CLIENT URLS      
     path('clients/', auth_required(views.c_list), name='clients'),     
     path('clients/new/', auth_required( views.new_client), name='new_client'),

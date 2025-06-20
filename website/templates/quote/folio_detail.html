@@ -1,0 +1,433 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/quote/folio_detail.css' %}">
+{% endblock %}
+
+{% csrf_token %}
+
+<div class="container-fluid px-4 py-3">
+    <!-- Header Section -->
+    <div class="folio-header">
+        <div class="folio-title">
+            <h2 class="folio-title h1"> Folio #{{ folio.id }} - {{ folio.name }}</h2>            
+        </div>
+        <div class="folio-actions">
+            <button class="btn btn-secondary" onclick="history.back()">
+                <i class="bi bi-arrow-left"></i> Regresar
+            </button>
+            <button class="btn btn-primary">
+                <i class="bi bi-pencil"></i> Editar Folio
+            </button>
+        </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="cards-grid">
+        <!-- Top Left Card - Combined Folio Info & Budget (Horizontal) -->
+        <div class="card folio-info-budget-card">
+            <!-- Single Card Header -->
+            <div class="card-header">
+                <h3><i class="bi bi-info-circle"></i> Información del Folio</h3>
+            </div>
+            
+            <!-- Horizontal Layout Body -->
+            <div class="card-body">
+                <!-- Left Side - Folio Info Section -->
+                <div class="folio-info-section">
+                    <div class="info-row">
+                        <span class="info-label">Cliente:</span>
+                        <span class="info-value">
+                            <i class="bi bi-person"></i>
+                            {{ folio.cliente.nombre }} {{ folio.cliente.apellido_paterno }} {{ folio.cliente.apellido_materno|default:"" }}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Agente:</span>
+                        <span class="info-value">
+                            <i class="bi bi-person-badge"></i>
+                                {% if folio.agente %}
+                                    {{ folio.agente.get_full_name|default:folio.agente.username }}
+                                {% else %}
+                                    No asignado
+                                {% endif %}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Celebración:</span>
+                        <span class="info-value celebration">
+                            {{ folio.get_tipo_viaje_display }}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Creado:</span>
+                        <span class="info-value">
+                            <i class="bi bi-calendar3"></i>
+                            {{ folio.created_at|date:"d/m/Y H:i" }}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Estado:</span>
+                        <span class="status-badge {% if folio.is_active %}active{% else %}inactive{% endif %}">
+                            {% if folio.is_active %}
+                                <i class="bi bi-check-circle"></i> Activo
+                            {% else %}
+                                <i class="bi bi-x-circle"></i> Inactivo
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Right Side - Budget Section -->
+                <div class="budget-section-simple">
+                    <h4><i class="bi bi-currency-dollar"></i> Presupuesto</h4>
+                    
+                    <form method="POST" action="{% url 'update_folio_budget_form' folio.id %}" class="budget-form" id="budgetForm">
+                        {% csrf_token %}
+                        <div class="input-group budget-input-row">
+                            <input type="number" 
+                                class="form-control budget-input" 
+                                id="budgetInput"
+                                name="budget"
+                                value="{{ folio.budget|floatformat:2 }}"
+                                step="0.01"
+                                min="0"
+                                max="999999999.99"
+                                placeholder="0.00"
+                                aria-label="Presupuesto"
+                                {% if not user == folio.agente and not user.is_staff %}disabled{% endif %}>
+
+                            <input type="hidden" name="currency" id="currencyInput" value="MXN">
+
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle currency-dropdown-button" type="button" id="currencyDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    MXN
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="#" data-currency="MXN">MXN - Peso Mexicano</a></li>
+                                    <li><a class="dropdown-item" href="#" data-currency="USD">USD - Dólar Americano</a></li>
+                                    <li><a class="dropdown-item" href="#" data-currency="EUR">EUR - Euro</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Save button that appears when value changes -->
+                        <button type="submit" 
+                                class="btn btn-sm btn-success budget-save-button" 
+                                id="saveBudgetBtn" 
+                                style="display: none;">
+                            <i class="bi bi-check"></i> Guardar
+                        </button>
+                        
+                        <div class="budget-status" id="budgetStatus">
+                            <small class="text-muted" id="changeIndicator" style="display: none;">
+                                <i class="bi bi-exclamation-circle"></i> Presiona "Guardar" para confirmar los cambios
+                            </small>
+                        </div>
+                    </form>
+                                            
+                    <div class="comments-section">
+                        <label for="folioComments" class="form-label">
+                            <i class="bi bi-chat-text"></i> Comentarios
+                        </label>
+                        <textarea 
+                            class="form-control auto-save" 
+                            id="folioComments" 
+                            placeholder="Agregar comentarios sobre este folio..."
+                            data-folio-id="{{ folio.id }}"
+                        >{{ folio.comments|default:"" }}</textarea>
+                        <div class="save-indicator" id="commentsSaveIndicator">
+                            <i class="bi bi-check-circle"></i> Guardado automáticamente
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Right Card - Revisiones (Taller) -->
+        <div class="card revisions-card tall-card">
+            <div class="card-header">
+                <h3><i class="bi bi-clock-history"></i> Revisiones</h3>
+                <button class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-plus-circle"></i> Nueva Revisión
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="empty-state">
+                    <i class="bi bi-clock-history empty-icon"></i>
+                    <p>No hay revisiones registradas</p>
+                    <small class="text-muted">Las revisiones del folio aparecerán aquí</small>
+                </div>
+                <!-- Placeholder for future revisions table -->
+                <div class="revisions-table-container" style="display: none;">
+                    <!-- Future editable revisions table will be implemented here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Left Card - Invitados -->
+        <div class="card guests-card">
+            <div class="card-header">
+                <h3><i class="bi bi-people"></i> Invitados</h3>
+                <button class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-person-plus"></i> Agregar Invitado
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="empty-state">
+                    <i class="bi bi-people-fill empty-icon"></i>
+                    <p>No hay invitados agregados aún</p>
+                    <small class="text-muted">Los invitados aparecerán aquí una vez que sean agregados</small>
+                </div>
+                <!-- Placeholder for future guests table -->
+                <div class="guests-table-container" style="display: none;">
+                    <!-- Future guests table will be implemented here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Right Card - Resumen General -->
+        <div class="card summary-card">
+            <div class="card-header">
+                <h3><i class="bi bi-clipboard-data"></i> Resumen General</h3>
+            </div>
+            <div class="card-body">
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-icon">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <div class="summary-content">
+                            <span class="summary-number">0</span>
+                            <span class="summary-label">Invitados</span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <div class="summary-icon budget-icon">
+                            <i class="bi bi-currency-dollar"></i>
+                        </div>
+                        <div class="summary-content">
+                            <span class="summary-number">${{ folio.budget|floatformat:0|default:"0" }}</span>
+                            <span class="summary-label">Presupuesto</span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <div class="summary-icon">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <div class="summary-content">
+                            <span class="summary-number">0</span>
+                            <span class="summary-label">Revisiones</span>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <div class="summary-icon status-icon">
+                            <i class="bi bi-{% if folio.is_active %}check-circle{% else %}x-circle{% endif %}"></i>
+                        </div>
+                        <div class="summary-content">
+                            <span class="summary-status {% if folio.is_active %}active{% else %}inactive{% endif %}">
+                                {% if folio.is_active %}Activo{% else %}Inactivo{% endif %}
+                            </span>
+                            <span class="summary-label">Estado</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="summary-progress">
+                    <div class="progress-item">
+                        <span class="progress-label">Progreso del Folio</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 25%"></div>
+                        </div>
+                        <span class="progress-text">25% Completado</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-save comments functionality
+    const commentsTextarea = document.getElementById('folioComments');
+    const commentsSaveIndicator = document.getElementById('commentsSaveIndicator');
+    let saveTimeout;
+
+    if (commentsTextarea) {
+        commentsTextarea.addEventListener('input', function() {
+            clearTimeout(saveTimeout);
+            commentsSaveIndicator.style.display = 'none';
+            
+            saveTimeout = setTimeout(() => {
+                saveComments();
+            }, 1000); // Save after 1 second of inactivity
+        });
+    }
+
+    function saveComments() {
+        const folioId = commentsTextarea.dataset.folioId;
+        const comments = commentsTextarea.value;
+        
+        // Show saving indicator
+        commentsSaveIndicator.innerHTML = '<i class="bi bi-clock"></i> Guardando...';
+        commentsSaveIndicator.style.display = 'block';
+        
+        // AJAX call to save comments
+        fetch(`/folio_detail/${folioId}/update_comments/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify({
+                comments: comments
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                commentsSaveIndicator.innerHTML = '<i class="bi bi-check-circle"></i> Guardado automáticamente';
+                commentsSaveIndicator.style.display = 'block';
+                setTimeout(() => {
+                    commentsSaveIndicator.style.display = 'none';
+                }, 2000);
+            } else {
+                commentsSaveIndicator.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Error al guardar';
+                commentsSaveIndicator.style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            commentsSaveIndicator.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Error al guardar';
+            commentsSaveIndicator.style.display = 'block';
+        });
+    }
+
+    const budgetInput = document.getElementById('budgetInput');
+    const saveBudgetBtn = document.getElementById('saveBudgetBtn');
+    const changeIndicator = document.getElementById('changeIndicator');    
+    let originalBudgetValue = budgetInput ? budgetInput.value : '';
+
+    const currencyDropdownButton = document.getElementById('currencyDropdown');
+    const currencyInput = document.getElementById('currencyInput');
+    const currencyDropdownItems = document.querySelectorAll('.dropdown-item[data-currency]');
+    if (currencyDropdownButton && currencyInput) {
+        currencyDropdownItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent link from navigating
+
+                const selectedCurrency = this.dataset.currency;
+
+                // Update the button text to show the selected currency
+                currencyDropdownButton.textContent = selectedCurrency;
+
+                // Update the hidden input's value
+                currencyInput.value = selectedCurrency;
+
+                // Trigger the input event on the main budget input to show the save button
+                budgetInput.dispatchEvent(new Event('input'));
+            });
+        });
+    }
+
+
+    if (budgetInput && saveBudgetBtn) {
+        // Show save button when budget changes
+        budgetInput.addEventListener('input', function() {
+            if (this.value !== originalBudgetValue) {
+                saveBudgetBtn.style.display = 'inline-block';
+                changeIndicator.style.display = 'block';
+            } else {
+                saveBudgetBtn.style.display = 'none';
+                changeIndicator.style.display = 'none';
+            }
+        });
+
+        // Handle form submission via JavaScript for better UX
+        const budgetForm = document.getElementById('budgetForm');
+        if (budgetForm) {
+            budgetForm.addEventListener('submit', function(e) {
+                e.preventDefault(); // Prevent default form submission
+                
+                const amount = parseFloat(budgetInput.value) || 0;
+                
+                // Show loading state
+                saveBudgetBtn.innerHTML = '<i class="bi bi-clock"></i> Guardando...';
+                saveBudgetBtn.disabled = true;
+                
+                // Use the form's action URL
+                fetch(budgetForm.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                        'X-Requested-With': 'XMLHttpRequest', // Ensure AJAX detection
+                    },
+                    body: new URLSearchParams({
+                        'budget': amount
+                    })
+                })
+                .then(response => {
+                    // Check if response is JSON
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        return response.json();
+                    } else {
+                        throw new Error('Server returned non-JSON response');
+                    }
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Success - hide the save button
+                        saveBudgetBtn.style.display = 'none';
+                        changeIndicator.style.display = 'none';
+                        
+                        // Update the original value (this was causing the error!)
+                        originalBudgetValue = budgetInput.value;
+                        
+                        // Show success message
+                        changeIndicator.innerHTML = '<i class="bi bi-check-circle"></i> ' + (data.message || 'Presupuesto actualizado correctamente');
+                        changeIndicator.style.display = 'block';
+                        changeIndicator.style.color = '#28a745';
+                        
+                        // Update summary card budget display
+                        const summaryBudget = document.querySelector('.summary-item .summary-number');
+                        if (summaryBudget && summaryBudget.textContent.includes('$')) {
+                            summaryBudget.textContent = '$' + parseFloat(budgetInput.value).toLocaleString();
+                        }
+                        
+                        setTimeout(() => {
+                            changeIndicator.style.display = 'none';
+                        }, 3000);
+                    } else {
+                        // Server returned success: false
+                        changeIndicator.innerHTML = '<i class="bi bi-exclamation-triangle"></i> ' + (data.error || 'Error al guardar el presupuesto');
+                        changeIndicator.style.display = 'block';
+                        changeIndicator.style.color = '#dc3545';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    changeIndicator.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Error al guardar el presupuesto';
+                    changeIndicator.style.display = 'block';
+                    changeIndicator.style.color = '#dc3545';
+                })
+                .finally(() => {
+                    // Reset button state
+                    saveBudgetBtn.innerHTML = '<i class="bi bi-check"></i> Guardar';
+                    saveBudgetBtn.disabled = false;
+                });
+            });
+        }
+    }
+});
+
+</script>
+
+{% endblock %}

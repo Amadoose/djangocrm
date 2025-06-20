@@ -3,6 +3,7 @@ from django.forms import ValidationError
 from django_countries.fields import CountryField
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator, MinValueValidator
+from decimal import Decimal
 
 
 # Create your models here.    
@@ -224,12 +225,28 @@ class Folio(models.Model):
         ('other', '✨ Otro'),
     ]
 
+    name = models.CharField(max_length=200)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='folios')
     agente = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='folios_asignados')
     tipo_viaje = models.CharField(max_length=50, choices=TIPO_VIAJE_CHOICES, default='vacation', verbose_name="Celebración")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
+
+    budget = models.DecimalField(
+        max_digits=12, 
+        decimal_places=2, 
+        default=Decimal('0.00'),
+        validators=[MinValueValidator(Decimal('0.00'))],
+        help_text="Presupuesto total en MXN",
+        blank=True, 
+        null=True,
+    )
+    comments = models.TextField(
+        blank=True, 
+        null=True,
+        help_text="Comentarios sobre el folio"
+    )    
 
     class Meta:
         ordering = ['-created_at']

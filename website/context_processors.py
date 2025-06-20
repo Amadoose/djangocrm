@@ -1,16 +1,10 @@
-def page_title(request):
-    # Map URL names to titles
-    url_titles = {
-        'home': 'Home',
-        'quote': 'New Quote',                
-        'reports': 'Reports',
-        'administration': 'Administration',
-        'new_client': '',
-        'update_client': '',
-        'client_detail': '',
-        # Add more as needed
-    }
-    url_name = getattr(request.resolver_match, 'url_name', None)
-    return {
-        'page_title': url_titles.get(url_name)
-    }
+from .models import Cliente, User  # Adjust imports based on your models
+
+def modal_context(request):
+    if request.user.is_authenticated:
+        return {
+            'clientes': Cliente.objects.all(),
+            'agentes': User.objects.all
+            #'agentes': User.objects.filter(is_staff=True)  # or however you identify agents
+        }
+    return {}
