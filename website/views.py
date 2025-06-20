@@ -54,23 +54,10 @@ def logout_user(request):
 # User creation view
 # User creation view
 def register_user(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            form.save()
-            # Authenticate the user after registration and log them in
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-            # Authenticate the user
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            messages.success(request, f'Cuenta creada para {username}. Ahora puedes iniciar sesión.')
-            return redirect('login')
-    else:
-        form = SignUpForm()            
-        return render(request, 'register.html', {'form': form})
-    
-    return render(request, 'register.html', {'form': form})    
+    """
+    Home view showing folio statistics and user's folios
+    Supports AJAX requests for live search
+    """
 
 
 # HOME
@@ -441,10 +428,11 @@ def update_folio_comments(request, folio_id):
 def update_folio_budget_form(request, folio_id):
     folio = get_object_or_404(Folio, id=folio_id)
     
-    if not request.user.has_perm('change_folio', folio):
+    if not (request.user == folio.agente or request.user.is_staff):
         messages.error(request, 'No tienes permisos para modificar este folio.')       
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'success': False, 'error': 'No tienes permiso'}, status=403)
+        return redirect('folio_detail', folio_id=folio.id) 
     
     budget_value = request.POST.get('budget', '0')               
     try:
