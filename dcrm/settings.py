@@ -25,7 +25,7 @@ sys.path.insert(0, str(BASE_DIR))  # Adds project root to Python path
 SECRET_KEY = 'django-insecure-id_7q%f1rr@)q#2l@i&0i8*27t1zv52i%b70v-msc_))kokpin'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
