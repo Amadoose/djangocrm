@@ -31,9 +31,9 @@ def login_user(request):
         
         if user is not None:
             login(request, user) 
-            return redirect('users')
+            return redirect('home')
         else:
-            return render(request, 'users.html', {'error': 'Invalid credentials, please try again.'})
+            return render(request, 'home.html', {'error': 'Invalid credentials, please try again.'})
     return render(request, 'login.html')
 
 def logout_user(request):
@@ -68,7 +68,7 @@ def register_user(request):
 # HOME
 def home(request):
     """
-    Dashboard view showing folio statistics and user's folios
+    Home view showing folio statistics and user's folios
     Supports AJAX requests for live search
     """
     # Get current user's folios (or all if staff)

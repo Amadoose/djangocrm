@@ -5,8 +5,8 @@ from . import views
 
 urlpatterns = [
     # AUTHENTICATE URLS
-    path('home/', auth_required(views.home), name='home'),      
-    path('', auth_required(views.c_list), name='clients'),     
+    path('', auth_required(views.home_optimized), name='home'),      
+    path('clients/', auth_required(views.c_list), name='clients'),     
     path('login/', views.login_user, name='login'), 
     path('logout/', views.logout_user, name='logout'),    
     ### QUOTE
