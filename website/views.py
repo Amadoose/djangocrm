@@ -21,9 +21,11 @@ from datetime import timedelta
 
 
 # This file defines the views for the 'website' app in the DCRM project.
-
 # User authentication views
 def login_user(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -31,10 +33,17 @@ def login_user(request):
         
         if user is not None:
             login(request, user) 
-            return redirect('home')
+            next_page = request.GET.get('next')
+            if next_page:
+                return redirect(next_page)
+            else:
+                return redirect('home')
         else:
-            return render(request, 'home.html', {'error': 'Invalid credentials, please try again.'})
+            messages.error(request, 'Datos incorrectos!')
+            return redirect('login')
+
     return render(request, 'login.html')
+
 
 def logout_user(request):
     logout(request)

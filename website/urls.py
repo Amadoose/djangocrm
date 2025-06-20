@@ -10,14 +10,14 @@ urlpatterns = [
     path('login/', views.login_user, name='login'), 
     path('logout/', views.logout_user, name='logout'),    
     ### QUOTE
-    path('api/search_clients/', views.search_clients_api, name='search_clients_api'),
-    path('api/search_agents/', views.search_agents_api, name='search_agents_api'),    
-    path('api/create-folio/', views.crear_folio_api, name='crear_folio_api'),
-    path('folio_detail/<int:folio_id>/', views.folio_detail, name='folio_detail'),
-    path('folio_detail/<int:folio_id>/update_comments/', views.update_folio_comments, name='update_folio_comments'),
-    path('folio_detail/<int:folio_id>/update_budget/', views.update_folio_budget_form, name='update_folio_budget_form'),
-    path('folio_detail/<int:folio_id>/toggle_status/', views.update_folio_status, name='update_folio_status'),
-    path('folios/', views.folios_list, name='folios_list'),
+    path('api/search_clients/', auth_required(views.search_clients_api), name='search_clients_api'),
+    path('api/search_agents/', auth_required(views.search_agents_api), name='search_agents_api'),    
+    path('api/create-folio/', auth_required(views.crear_folio_api), name='crear_folio_api'),
+    path('folio_detail/<int:folio_id>/', auth_required(views.folio_detail), name='folio_detail'),
+    path('folio_detail/<int:folio_id>/update_comments/', auth_required(views.update_folio_comments), name='update_folio_comments'),
+    path('folio_detail/<int:folio_id>/update_budget/', auth_required(views.update_folio_budget_form), name='update_folio_budget_form'),
+    path('folio_detail/<int:folio_id>/toggle_status/', auth_required(views.update_folio_status), name='update_folio_status'),
+    path('folios/', auth_required(views.folios_list), name='folios_list'),
     
     ### CLIENT URLS      
     path('clients/', auth_required(views.c_list), name='clients'),     
